@@ -28,12 +28,16 @@ class DamageCalculator:
         damage *= stab  *effectiveness
         if effectiveness ==0:
             note="no effect"
+        elif effectiveness ==0.25:
+            note ="quad resists"
         elif effectiveness <1:
             note="not very effective"
         elif effectiveness==1:
+            note="normal effective"
+        elif effectiveness ==2.0:
             note="super effective"
         else:
-            note="double super effective"
+            note="double supper effective"
         #print(f"DEBUG: stab={stab}, effectiveness={effectiveness}, power={move.power}, atk={atk}, def_={def_}")
         #print(f"DEBUG: raw damage before stab/effectiveness = {((2 * 50 / 5 + 2) * move.power * atk / def_) / 50 + 2}")
         #print(f"DEBUG: final = {((2 * 50 / 5 + 2) * move.power * atk / def_) / 50 + 2} * {stab} * {effectiveness}")

@@ -15,6 +15,8 @@ class TypeCalculator:
         with open(chart_path,"r") as f:
             self.chart=json.load(f)
     def effectiveness(self,attacking_type:str,defending_type:str)->float:
+        attacking_type=attacking_type.capitalize()
+        defending_type=defending_type.capitalize()
         if attacking_type not in self.chart:
             raise ValueError(f"unknown type:{attacking_type}")
         return self.chart[attacking_type].get(defending_type,1.0)
