@@ -14,6 +14,13 @@
     "Dragon": 0.5,
     "Steel": 2
   },
+  "Dark": {
+    "Fighting": 0.5,
+    "Psychic": 2.0,
+    "Ghost": 2.0,
+    "Dark": 0.5,
+    "Fairy": 0.5
+  },
   "Water": {
     "Fire": 2,
     "Water": 0.5,
