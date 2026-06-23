@@ -1,3 +1,4 @@
+import os
 import json
 from models.pokemon import Pokemon
 from models.move import Move
@@ -75,3 +76,46 @@ def load_all_pokemon()->dict:
             moves=moves
         )
     return result
+def get_pokemon_moves(pokemon_name:str)-> list:
+    moves_path = f"data/moves_{pokemon_name.lower()}.json"
+
+    if os.path.exists(moves_path):
+        with open(moves_path, "r",encoding="utf-8") as f:
+            cached_data = json.load(f)
+            if cached_data is not None:
+                return cached_data 
+    
+    print(f"fetching moves for {pokemon_name}...")
+    from scraper.fetch_data import fetch_moves_for_pokemon
+    moves = fetch_moves_for_pokemon(pokemon_name.lower())
+
+    if moves is None:
+        print(
+            f" Error:Could not fetch pokemon moves for {pokemon_name}. Check your scraper or internet connection"
+
+        )
+        return []
+    with open(moves_path,"w",encoding="utf-8") as f:
+        json.dump(moves,f,indent=2)
+
+    return moves
+def load_pokemon_with_moves(name:str)->Pokemon:
+    pokemon = load_pokemon_fuzzy(name)
+    if not pokemon:
+        return None
+    
+    raw_moves = get_pokemon_moves(name.lower())
+
+    move_objects = []
+    for m in raw_moves:
+        
+        move = Move(
+            name= m["name"],
+            move_type=m["type"],
+            power=m["power"],
+            category=m["damage_class"],
+            accuracy=m["accuracy"]
+        )
+        move_objects.append(move)
+    pokemon.moves = move_objects
+    return pokemon

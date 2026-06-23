@@ -100,94 +100,101 @@
 # # ]
 # # advisor.recommend_move(pikachu, gyarados,moves)
 
-from engine.advisor import PreMatchAdvisor
-from engine.battle_advisor import BattleAdvisor
-from data_loader import load_pokemon_fuzzy,load_pokemon
-from data_loader import search_pokemon
-from models.move import Move
+# from engine.advisor import PreMatchAdvisor
+# from engine.battle_advisor import BattleAdvisor
+# from data_loader import load_pokemon_fuzzy,load_pokemon
+# from data_loader import search_pokemon
+# from models.move import Move
 
-def pre_match_mode():
-    print("\n=== PRE-MATCH TEAM SELECTOR ===")
-    print("Enter your 6 Pokemon (partial names ok):")
-    my_team=[]
-    for i in range(6):
-        while True:
-            name = input(f"your pokemon {i+1}: ").strip().lower()
-            pokemon=load_pokemon_fuzzy(name)
-            if pokemon:
-                my_team.append(pokemon)
-                print(f"    added: {pokemon.name}")
-                break
-            # try:
-            #     my_team.append(load_pokemon_fuzzy(name))
-            #     break
-            # except ValueError:
-            #     print(f"'{name}' not found. try again.")
-    print("\nEnter opponent's 6 Pokemon (one per line):")
-    opp_team = []
-    for i in range(6):
-        while True:
-            name = input(f" Opponent Pokemon {i+1}: ").strip().lower()
-            pokemon=load_pokemon_fuzzy(name)
-            if pokemon:
-                opp_team.append(pokemon)
-                print(f" added: {pokemon.name}")
-                break
-            # try:
-            #     opp_team.append(load_pokemon_fuzzy(name))
-            #     break
-            # except ValueError:
-            #     print(f" '{name}' not found. try again.")
-    advisor = PreMatchAdvisor()
-    return advisor.recommend(my_team,opp_team)
-def battle_mode():
-    print("\n=== IN-BATTLE MOVE ADVISOR ===")
-    my_name = input("your active pokemon: ").strip().lower()
-    my_pokemon = load_pokemon_fuzzy(my_name)
-    my_hp= int(input(f" Current Hp (max {my_pokemon.stats['hp']}): "))
-    my_pokemon.current_hp = my_hp
+# def pre_match_mode():
+#     print("\n=== PRE-MATCH TEAM SELECTOR ===")
+#     print("Enter your 6 Pokemon (partial names ok):")
+#     my_team=[]
+#     for i in range(6):
+#         while True:
+#             name = input(f"your pokemon {i+1}: ").strip().lower()
+#             pokemon=load_pokemon_fuzzy(name)
+#             if pokemon:
+#                 my_team.append(pokemon)
+#                 print(f"    added: {pokemon.name}")
+#                 break
+#             # try:
+#             #     my_team.append(load_pokemon_fuzzy(name))
+#             #     break
+#             # except ValueError:
+#             #     print(f"'{name}' not found. try again.")
+#     print("\nEnter opponent's 6 Pokemon (one per line):")
+#     opp_team = []
+#     for i in range(6):
+#         while True:
+#             name = input(f" Opponent Pokemon {i+1}: ").strip().lower()
+#             pokemon=load_pokemon_fuzzy(name)
+#             if pokemon:
+#                 opp_team.append(pokemon)
+#                 print(f" added: {pokemon.name}")
+#                 break
+#             # try:
+#             #     opp_team.append(load_pokemon_fuzzy(name))
+#             #     break
+#             # except ValueError:
+#             #     print(f" '{name}' not found. try again.")
+#     advisor = PreMatchAdvisor()
+#     return advisor.recommend(my_team,opp_team)
+# def battle_mode():
+#     print("\n=== IN-BATTLE MOVE ADVISOR ===")
+#     my_name = input("your active pokemon: ").strip().lower()
+#     my_pokemon = load_pokemon_fuzzy(my_name)
+#     my_hp= int(input(f" Current Hp (max {my_pokemon.stats['hp']}): "))
+#     my_pokemon.current_hp = my_hp
 
-    opp_name= input("opponent's active Pokemon: ").strip().lower()
-    opp_pokemon =load_pokemon_fuzzy(opp_name)
-    opp_hp = int(input(f" opponent's current hp (max{opp_pokemon.stats['hp']}): "))
-    opp_pokemon.current_hp = opp_hp
+#     opp_name= input("opponent's active Pokemon: ").strip().lower()
+#     opp_pokemon =load_pokemon_fuzzy(opp_name)
+#     opp_hp = int(input(f" opponent's current hp (max{opp_pokemon.stats['hp']}): "))
+#     opp_pokemon.current_hp = opp_hp
 
-    print("\nYour 4 moves: ")
-    moves=[]
-    move_data = [
-        ("Thunderbolt","Electric",90,"Special",100),
-        ("Iron Tail","Steel",100,"Physical",75),
-        ("Quick Attack","Normal",40,"Physical",100),
-        ("Thunder Wave","Electric",0,"Status",90),
-    ]
-    for name, mtype , power , cat, acc in move_data:
-        moves.append(Move(name, mtype, power,cat ,acc))
-    advisor = BattleAdvisor()
-    advisor.recommend_move(my_pokemon, opp_pokemon, moves)
-def main():
-    print("="*45)
-    print(" POKEMON CHAMPIONS BATTLE ADVISOR")
-    print("="*45)
+#     print("\nYour 4 moves: ")
+#     moves=[]
+#     move_data = [
+#         ("Thunderbolt","Electric",90,"Special",100),
+#         ("Iron Tail","Steel",100,"Physical",75),
+#         ("Quick Attack","Normal",40,"Physical",100),
+#         ("Thunder Wave","Electric",0,"Status",90),
+#     ]
+#     for name, mtype , power , cat, acc in move_data:
+#         moves.append(Move(name, mtype, power,cat ,acc))
+#     advisor = BattleAdvisor()
+#     advisor.recommend_move(my_pokemon, opp_pokemon, moves)
+# def main():
+#     print("="*45)
+#     print(" POKEMON CHAMPIONS BATTLE ADVISOR")
+#     print("="*45)
 
-    while True:
-        print("\n1. Pre-match team selector")
-        print("2. In-battle move advisor")
-        print("3.exit")
+#     while True:
+#         print("\n1. Pre-match team selector")
+#         print("2. In-battle move advisor")
+#         print("3.exit")
 
-        choice = input ("\nChoose (1-3): ").strip()
-        if choice=="1":
-            pre_match_mode()
-        elif choice=="2":
-            battle_mode()
-        elif choice=="3":
-            print("Good luck in your battles!")
-            break
-        else:
-            print("Invalid choice.")
-# print(search_pokemon("azuma"))
-# print(search_pokemon("corvi"))
-# print(search_pokemon("frolss"))
-# print(search_pokemon("snow"))
-# print(search_pokemon("luca"))
-if __name__=="__main__":
-    main()
+#         choice = input ("\nChoose (1-3): ").strip()
+#         if choice=="1":
+#             pre_match_mode()
+#         elif choice=="2":
+#             battle_mode()
+#         elif choice=="3":
+#             print("Good luck in your battles!")
+#             break
+#         else:
+#             print("Invalid choice.")
+# # print(search_pokemon("azuma"))
+# # print(search_pokemon("corvi"))
+# # print(search_pokemon("frolss"))
+# # print(search_pokemon("snow"))
+# # print(search_pokemon("luca"))
+# if __name__=="__main__":
+#     main()
+from data_loader import load_pokemon_with_moves
+
+scizor=load_pokemon_with_moves("scizor")
+print(scizor)
+print(f"\n{scizor.name}'s moves:")
+for move in scizor.moves[:5]:
+    print(f"{move}")

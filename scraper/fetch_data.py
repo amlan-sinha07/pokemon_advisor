@@ -66,9 +66,62 @@ def fetch_and_save(pokemon_ids: list, output_path: str):
         time.sleep(2)
 
     print(f"\nDone! Total database size: {len(all_pokemon)} Pokémon.")
-
-if __name__ == "__main__":
-    generation_9_max = 1025
-    all_pokemon_ids = [str(i) for i in range(1, generation_9_max + 1)]
+def fetch_move(move_name: str)-> dict:
+    url=f"https://pokeapi.co/api/v2/move/{move_name.lower().replace(' ','-')}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        return None
     
-    fetch_and_save(all_pokemon_ids, "data/pokemon_all.json")
+    data = response.json()
+
+    effect_text = ""
+    if data.get("effect_entries"):
+        for entry in data["effect_entries"]:
+            if entry["language"]["name"] == "en":
+                effect_text = entry["short_effect"]
+                break
+
+    return {
+        "name": data["name"],
+        "type": data["type"]["name"].capitalize(),
+        "power": data["power"] or 0,
+        "accuracy": data["accuracy"] or 0,
+        "pp": data["pp"],
+        "damage_class": data["damage_class"]["name"].capitalize(),
+        "effect": effect_text,
+    }
+def fetch_moves_for_pokemon(pokemon_name:str) ->list:
+    with open("data/pokemon_all.json","r",encoding="utf-8") as f:
+        all_pokemon = json.load(f)
+    
+    if pokemon_name not in all_pokemon:
+        print(
+            f"Debug Error: '{pokemon_name}' not found in pokemon_all.json keys!"
+        )
+        print(f"Availbale keys snippet: {list(all_pokemon.keys())[:5]}")
+        return []
+    
+    move_names = all_pokemon[pokemon_name]["moves"][:20]
+    moves = []
+
+    print(f"found {len(move_names)} moves to fetch for {pokemon_name}...")
+    
+    for move_name in move_names:
+        print(f"    fetching move: {move_name}...")
+        move = fetch_move(move_name)
+        
+        if move is None:
+            print(f"    warning: fetch_move('{move_name}) returned None!")
+        
+        if move:
+            moves.append(move)
+        
+        time.sleep(0.2)
+    
+    print(f"succesfully fetched {len(moves)} out of {len(move_names)} moves.")
+    return moves
+# if __name__ == "__main__":
+#     generation_9_max = 1025
+#     all_pokemon_ids = [str(i) for i in range(1, generation_9_max + 1)]
+    
+#     fetch_and_save(all_pokemon_ids, "data/pokemon_all.json")
