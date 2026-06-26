@@ -1,6 +1,6 @@
-# # # # from engine.damage_calc import DamageCalculator
-# # # # from data_loader import load_pokemon
-# # # # from models.move import Move
+from engine.damage_calc import DamageCalculator
+from data_loader import load_pokemon
+from models.move import Move
 
 # # # # calc=DamageCalculator()
 
@@ -21,7 +21,7 @@
 # # # # result3=calc.calculate(mewtwo,mewtwo,psychic)
 # # # # print(f"Psychic vs Mewtwo: {result3}")
 
-# # # # from engine.type_calc import TypeCalculator
+from engine.type_calc import TypeCalculator
 # # # # calc = TypeCalculator()
 # # # # print(calc.effectiveness("Psychic", "Psychic"))  # should be 0.5
 # # # # mewtwo = load_pokemon("mewtwo")
@@ -52,8 +52,8 @@
 # # # #
 # # # #
 # # # #
-# from engine.advisor import PreMatchAdvisor
-# from data_loader import load_pokemon
+from engine.advisor import PreMatchAdvisor
+from data_loader import load_pokemon
 
 # advisor = PreMatchAdvisor()
 
@@ -78,9 +78,9 @@
 # # #
 # # #
 # # #
-# # from engine.battle_advisor import BattleAdvisor
-# # from data_loader import load_pokemon
-# # from models.move import Move
+from engine.battle_advisor import BattleAdvisor
+from data_loader import load_pokemon
+from models.move import Move
 
 # # advisor= BattleAdvisor()
 
@@ -189,9 +189,9 @@ def main():
 # print(search_pokemon("frolss"))
 # print(search_pokemon("snow"))
 # print(search_pokemon("luca"))
-# if __name__=="__main__":
-#     main()
-# from data_loader import load_pokemon_with_moves
+if __name__=="__main__":
+    main()
+from data_loader import load_pokemon_with_moves
 
 # scizor=load_pokemon_with_moves("scizor")
 # print(scizor)
@@ -202,12 +202,64 @@ def main():
 # print(gyarados.stats)
 from engine.damage_calc import DamageCalculator
 from data_loader import load_pokemon
-from models.move import Move
+#from models.move import Move
 
-calc = DamageCalculator()
-pikachu= load_pokemon("pikachu")
-gyarados = load_pokemon("gyarados")
-thunderbolt=Move("Thunderbolt","Electric",90,"Special",100)
+# calc = DamageCalculator()
+# pikachu= load_pokemon("pikachu")
+# gyarados = load_pokemon("gyarados")
+# thunderbolt=Move("Thunderbolt","Electric",90,"Special",100)
 
-result = calc.calculate(pikachu,gyarados,thunderbolt)
-print(result)
+# result = calc.calculate(pikachu,gyarados,thunderbolt)
+# print(result)
+from data_loader import get_move_fuzzy
+
+# m=get_move_fuzzy("thunderbolt")
+# print(m)
+
+# m2= get_move_fuzzy("earthquake")
+# print(m2)
+
+# m3= get_move_fuzzy("thunder")
+# print(m3)
+from data_loader import load_pokemon,load_pokemon_fuzzy,get_move_fuzzy
+def battle_mode():
+    print("\n=== IN-BATTLE MOVE ADVISOR ===")
+    my_name=input("your active pokemon: ").strip()
+    my_pokemon=load_pokemon_fuzzy(my_name)
+    if not my_pokemon:
+        return
+    my_hp=int(input(f"current hp (max{my_pokemon.stats['hp']}): "))
+    my_pokemon.current_hp=my_hp
+
+    opp_name=input("opponent's active pokemon: ").strip()
+    opp_pokemon=load_pokemon_fuzzy(opp_name)
+    if not opp_pokemon:
+        return
+    opp_hp=int(input(f"opponent hp (max {opp_pokemon.stats['hp']}): \n"))
+    opp_pokemon.current_hp=opp_hp
+
+    print(f"Enter your 4 moves for {my_pokemon.name}:")
+    moves=[]
+    for i in range(4):
+        while True:
+            move_name=input(f"move {i+1}: ").strip()
+            if not move_name:
+                continue
+            move_data=get_move_fuzzy(move_name)
+            if move_data:
+                move=Move(
+                    name=move_data["name"],
+                    move_type=move_data["type"],
+                    power=move_data["power"],
+                    category=move_data["damage_class"],
+                    accuracy=move_data["accuracy"]
+                )
+                moves.append(move)
+                print(f" added: {move.name}"
+                      f"[{move.move_type}]"
+                      f"power:{move.power}")
+                break
+            else:
+                print(f" move {move_name} not found . try again.")
+    advisor =BattleAdvisor()
+    advisor.recommend_move(my_pokemon,opp_pokemon,moves)

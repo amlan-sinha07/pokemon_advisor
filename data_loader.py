@@ -119,3 +119,75 @@ def load_pokemon_with_moves(name:str)->Pokemon:
         move_objects.append(move)
     pokemon.moves = move_objects
     return pokemon
+def get_move(move_name: str)->dict:
+    import glob
+    move_name_clean = move_name.lower().replace(" ","-")
+
+    for filepath in glob.glob("data/moves_*.json"):
+        with open(filepath,"r",encoding="utf-8") as f:
+            moves = json.load(f)
+        for move in moves:
+            if move["name"] == move_name_clean:
+                return move
+        
+        print(f"fetching move data for {move_name}...")
+        url= f"https://pokeapi.co/api/v2/move/{move_name_clean}"
+        
+        import requests
+        response=requests.get(url)
+        if response.status_code != 200:
+            return None
+        data=response.json()
+
+        effect = ""
+
+        if data.get("effect_entries"):
+            for entry in data["effect_entries"]:
+                if entry.get("language",{}).get("name") == "en":
+                    effect = entry.get("short_effect","")
+                    break
+        return {
+            "name":data.get("name"),
+            "type":data.get("type",{}).get("name","normal").capitalize(),
+            "power":data.get("power") or 0,
+            "accuracy":data.get("accuracy") or 0,
+            "pp":data.get("pp") or 0,
+            "damage_class":data.get("damage_class",{}).get("name","Physical").capitalize(),
+            "effect": effect
+            #data["effect_entries"][0]["short_effect"]
+             #        if data["effect_entries"] else ""
+        }
+def get_move_fuzzy(move_name:str)->dict:
+    from difflib import get_close_matches
+    import glob
+    move_name_clean = move_name.lower().replace(" ","-")
+
+    all_moves_names=[]
+    for filepath in glob.glob("data/moves_*.json"):
+        with open(filepath,"r",encoding="utf-8") as f:
+            moves=json.load(f)
+        for move in moves:
+            if move["name"] not in all_moves_names:
+                all_moves_names.append(move["name"])
+
+    if move_name_clean in all_moves_names:
+        return get_move(move_name_clean)
+
+    matches=get_close_matches(move_name_clean,
+                              all_moves_names,
+                              n=5,
+                              cutoff=0.5)
+    if not matches:
+        return get_move(move_name_clean)
+
+    if len(matches) ==1:
+        print(f"assuming move:{matches[0]}")
+        return get_move(matches[0])
+    print("did you mean:")
+    for i,m in enumerate(matches):
+        print(f" {i+1}.{m}")
+    choice=input=input("choose (1-5): ").strip()
+    try:
+        return get_move(matches[int(choice)-1])
+    except:
+        return get_move(matches[0])        
