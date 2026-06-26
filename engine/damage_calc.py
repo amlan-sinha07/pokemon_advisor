@@ -1,6 +1,8 @@
 #
 #
 #
+import subprocess
+import os
 from models.pokemon import Pokemon
 from models.move import Move
 from engine.type_calc import TypeCalculator
@@ -8,6 +10,22 @@ from engine.type_calc import TypeCalculator
 class DamageCalculator:
     def __init__(self):
         self.type_calc=TypeCalculator()
+        self.cpp_calc=os.path.join(
+            os.path.dirname(__file__),"damage_calc.exe"
+        )
+    def calculate_cpp(self, power:int, atk:int,
+                      def_stat:int,effectiveness:float,
+                      stab:float)->int:
+        if not os.path.exists(self.cpp_calc):
+            return None
+        input_str = f"{power} {atk} {def_stat} {effectiveness} {stab}"
+        result = subprocess.run(
+            [self.cpp_calc],
+            input=input_str,
+            capture_output=True,
+            text=True
+        )
+        return int(result.stdout.strip())
     def calculate(self,attacker:Pokemon,defender:Pokemon,
                   move:Move)->dict:
         if not move.is_damaging():
@@ -24,8 +42,18 @@ class DamageCalculator:
         else:
             atk=attacker.stats["spa"]
             def_=defender.stats["spd"]
-        damage=((2*50/5+2)* move.power * atk/ def_)/50+2
-        damage *= stab  *effectiveness
+        cpp_result = self.calculate_cpp(
+            move.power, atk , def_,effectiveness,stab
+        )
+        if cpp_result is not None:
+            damage = cpp_result
+            engine= "C++"
+        else:
+            damage= ((2*50/5+2)* move.power*atk/def_)/50+2
+            damage= round(damage*stab*effectiveness)
+            engine= "Python"
+        #damage=((2*50/5+2)* move.power * atk/ def_)/50+2
+        #damage *= stab  *effectiveness
         if effectiveness ==0:
             note="no effect"
         elif effectiveness ==0.25:
@@ -37,7 +65,7 @@ class DamageCalculator:
         elif effectiveness ==2.0:
             note="super effective"
         else:
-            note="double supper effective"
+            note="double super effective"
         #print(f"DEBUG: stab={stab}, effectiveness={effectiveness}, power={move.power}, atk={atk}, def_={def_}")
         #print(f"DEBUG: raw damage before stab/effectiveness = {((2 * 50 / 5 + 2) * move.power * atk / def_) / 50 + 2}")
         #print(f"DEBUG: final = {((2 * 50 / 5 + 2) * move.power * atk / def_) / 50 + 2} * {stab} * {effectiveness}")
@@ -45,6 +73,7 @@ class DamageCalculator:
             "damage":round(damage),
             "effectiveness":effectiveness,
             "stab":stab,
-            "note":note
+            "note":note,
+            "engine":engine
         }
     
