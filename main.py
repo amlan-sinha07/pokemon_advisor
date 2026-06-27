@@ -107,24 +107,40 @@ from engine.battle_advisor import BattleAdvisor
 from data_loader import load_pokemon_fuzzy,load_pokemon
 from data_loader import search_pokemon
 from models.move import Move
+from box_manager import load_box,add_to_box,remove_from_box,view_box
 
 def pre_match_mode():
     print("\n=== PRE-MATCH TEAM SELECTOR ===")
-    print("Enter your 6 Pokemon (partial names ok):")
-    my_team=[]
-    for i in range(6):
-        while True:
-            name = input(f"your pokemon {i+1}: ").strip().lower()
+
+    box=load_box()
+    #print("Enter your 6 Pokemon (partial names ok):")
+    if box:
+        print(f"loading your saved pokemon ({len(box)}) pokemon")
+        my_team=[]
+        for name in box:
+        #while True:
+         #   name = input(f"your pokemon {i+1}: ").strip().lower()
             pokemon=load_pokemon_fuzzy(name)
             if pokemon:
                 my_team.append(pokemon)
                 print(f"    added: {pokemon.name}")
-                break
+                
             # try:
             #     my_team.append(load_pokemon_fuzzy(name))
             #     break
             # except ValueError:
             #     print(f"'{name}' not found. try again.")
+    else:
+        print("no saved box found enter your pokemon manually:")
+        my_team=[]
+        for i in range(6):
+            while True:
+                name=input(f"your pokemon {i+1}: ").strip().lower()
+                pokemon=load_pokemon_fuzzy(name)
+                if pokemon:
+                    my_team.append(pokemon)
+                    print(f"added : {pokemon.name}")
+                    break
     print("\nEnter opponent's 6 Pokemon (one per line):")
     opp_team = []
     for i in range(6):
@@ -200,8 +216,31 @@ def battle_mode():
     # ]
     # for name, mtype , power , cat, acc in move_data:
     #     moves.append(Move(name, mtype, power,cat ,acc))
-    advisor = BattleAdvisor()
-    advisor.recommend_move(my_pokemon, opp_pokemon, moves)
+    # advisor = BattleAdvisor()
+    # advisor.recommend_move(my_pokemon, opp_pokemon, moves)
+def box_mode():
+    while True:
+        print("\n=== MY BOX ===")
+        print("1. view box")
+        print("2. add pokemon")
+        print("3. remove pokemon")
+        print("4. back")
+        print()
+
+        choice=input("\nchoose (1-4): ").strip()
+
+        if choice=="1":
+            view_box()
+        elif choice=="2":
+            name=input("pokemon name:").strip()
+            add_to_box(name)
+        elif choice=="3":
+            view_box()
+            name=input("remove which pokemon: ").strip()
+            remove_from_box(name)
+        elif choice=="4":
+            break
+
 def main():
     print("="*45)
     print(" POKEMON CHAMPIONS BATTLE ADVISOR")
@@ -210,14 +249,17 @@ def main():
     while True:
         print("\n1. Pre-match team selector")
         print("2. In-battle move advisor")
-        print("3.exit")
+        print("3. Manage my box")
+        print("4. Exit")
 
-        choice = input ("\nChoose (1-3): ").strip()
+        choice = input ("\nChoose (1-4): ").strip()
         if choice=="1":
             pre_match_mode()
         elif choice=="2":
             battle_mode()
         elif choice=="3":
+            box_mode()
+        elif choice=="4":
             print("Good luck in your battles!")
             break
         else:
