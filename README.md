@@ -21,15 +21,15 @@ A real time battle decision tool for Pokemon Champions (2026) built in Python wi
 ## Sample Output
 
 ### Pre-match Team Selector
-![Pre-Match team selector](Screenshot%202026-06-27%20185749.png)
-![Team Suggestion](Screenshot%202026-06-27%20185804.png)
+![Pre-Match team selector](<Screenshot 2026-06-27 185749.png>)
+![Team Suggestion](<Screenshot 2026-06-27 185804.png>)
 
 ### In-Battle Move Advisor
-![In-Battle Move Advisor](Screenshot%202026-06-27%20190707.png)
-![Move Selector](Screenshot%202026-06-27%20190721.png)
+![In-Battle Move Advisor](<Screenshot 2026-06-27 190707.png>)
+![Move Selector](<Screenshot 2026-06-27 190721.png>)
 
 ### Viewing full box
-![Viewing full box](Screenshot%202026-06-27%20190731.png)
+![Viewing full box](<Screenshot 2026-06-27 190731.png>)
 
 ### Pre Match Analysis
 
