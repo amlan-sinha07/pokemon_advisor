@@ -100,6 +100,8 @@ from models.move import Move
 # # ]
 # # advisor.recommend_move(pikachu, gyarados,moves)
 
+from data_loader import load_pokemon,load_pokemon_fuzzy,get_move_fuzzy
+import sys
 from engine.advisor import PreMatchAdvisor
 from engine.battle_advisor import BattleAdvisor
 from data_loader import load_pokemon_fuzzy,load_pokemon
@@ -152,16 +154,52 @@ def battle_mode():
     opp_hp = int(input(f" opponent's current hp (max{opp_pokemon.stats['hp']}): "))
     opp_pokemon.current_hp = opp_hp
 
-    print("\nYour 4 moves: ")
+    #print("\nYour 4 moves: ")
+    #moves=[]
+    print(f"Enter your 4 moves for {my_pokemon.name}:")
+    sys.stdin.flush()
+    try:
+        import msvcrt
+        while msvcrt.kbhit():
+            msvcrt.getch()
+    except:
+        pass
+    
     moves=[]
-    move_data = [
-        ("Thunderbolt","Electric",90,"Special",100),
-        ("Iron Tail","Steel",100,"Physical",75),
-        ("Quick Attack","Normal",40,"Physical",100),
-        ("Thunder Wave","Electric",0,"Status",90),
-    ]
-    for name, mtype , power , cat, acc in move_data:
-        moves.append(Move(name, mtype, power,cat ,acc))
+    for i in range(4):
+        print(f"bedug before input -> {moves}")
+        while True:
+            move_name=input(f"move {i+1}: ").strip()
+            print("you entered",move_name)
+            if not move_name:
+
+                continue
+            move_data=get_move_fuzzy(move_name)
+            if move_data:
+                move=Move(
+                    name=move_data["name"],
+                    move_type=move_data["type"],
+                    power=move_data["power"],
+                    category=move_data["damage_class"],
+                    accuracy=move_data["accuracy"]
+                )
+                moves.append(move)
+                print(f" added: {move.name}"
+                      f"[{move.move_type}]"
+                      f"power:{move.power}")
+                break
+            else:
+                print(f" move {move_name} not found . try again.")
+    advisor =BattleAdvisor()
+    advisor.recommend_move(my_pokemon,opp_pokemon,moves)
+    # move_data = [
+    #     ("Thunderbolt","Electric",90,"Special",100),
+    #     ("Iron Tail","Steel",100,"Physical",75),
+    #     ("Quick Attack","Normal",40,"Physical",100),
+    #     ("Thunder Wave","Electric",0,"Status",90),
+    # ]
+    # for name, mtype , power , cat, acc in move_data:
+    #     moves.append(Move(name, mtype, power,cat ,acc))
     advisor = BattleAdvisor()
     advisor.recommend_move(my_pokemon, opp_pokemon, moves)
 def main():
@@ -221,45 +259,22 @@ from data_loader import get_move_fuzzy
 
 # m3= get_move_fuzzy("thunder")
 # print(m3)
-from data_loader import load_pokemon,load_pokemon_fuzzy,get_move_fuzzy
-def battle_mode():
-    print("\n=== IN-BATTLE MOVE ADVISOR ===")
-    my_name=input("your active pokemon: ").strip()
-    my_pokemon=load_pokemon_fuzzy(my_name)
-    if not my_pokemon:
-        return
-    my_hp=int(input(f"current hp (max{my_pokemon.stats['hp']}): "))
-    my_pokemon.current_hp=my_hp
+# from data_loader import load_pokemon,load_pokemon_fuzzy,get_move_fuzzy
+# import sys
+# def battle_mode():
+#     print("\n=== IN-BATTLE MOVE ADVISOR ===")
+#     my_name=input("your active pokemon: ").strip()
+#     my_pokemon=load_pokemon_fuzzy(my_name)
+#     if not my_pokemon:
+#         return
+#     my_hp=int(input(f"current hp (max{my_pokemon.stats['hp']}): "))
+#     my_pokemon.current_hp=my_hp
 
-    opp_name=input("opponent's active pokemon: ").strip()
-    opp_pokemon=load_pokemon_fuzzy(opp_name)
-    if not opp_pokemon:
-        return
-    opp_hp=int(input(f"opponent hp (max {opp_pokemon.stats['hp']}): \n"))
-    opp_pokemon.current_hp=opp_hp
+#     opp_name=input("opponent's active pokemon: ").strip()
+#     opp_pokemon=load_pokemon_fuzzy(opp_name)
+#     if not opp_pokemon:
+#         return
+#     opp_hp=int(input(f"opponent hp (max {opp_pokemon.stats['hp']}): \n"))
+#     opp_pokemon.current_hp=opp_hp
 
-    print(f"Enter your 4 moves for {my_pokemon.name}:")
-    moves=[]
-    for i in range(4):
-        while True:
-            move_name=input(f"move {i+1}: ").strip()
-            if not move_name:
-                continue
-            move_data=get_move_fuzzy(move_name)
-            if move_data:
-                move=Move(
-                    name=move_data["name"],
-                    move_type=move_data["type"],
-                    power=move_data["power"],
-                    category=move_data["damage_class"],
-                    accuracy=move_data["accuracy"]
-                )
-                moves.append(move)
-                print(f" added: {move.name}"
-                      f"[{move.move_type}]"
-                      f"power:{move.power}")
-                break
-            else:
-                print(f" move {move_name} not found . try again.")
-    advisor =BattleAdvisor()
-    advisor.recommend_move(my_pokemon,opp_pokemon,moves)
+    

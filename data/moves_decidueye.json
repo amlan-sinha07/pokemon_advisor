@@ -1,0 +1,182 @@
+[
+  {
+    "name": "swords-dance",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s Attack by two stages."
+  },
+  {
+    "name": "fury-attack",
+    "type": "Normal",
+    "power": 15,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "Hits 2-5 times in one turn."
+  },
+  {
+    "name": "tackle",
+    "type": "Normal",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "take-down",
+    "type": "Normal",
+    "power": 90,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "User receives 1/4 the damage it inflicts in recoil."
+  },
+  {
+    "name": "growl",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 40,
+    "damage_class": "Status",
+    "effect": "Lowers the target\u2019s Attack by one stage."
+  },
+  {
+    "name": "hyper-beam",
+    "type": "Normal",
+    "power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "User foregoes its next turn to recharge."
+  },
+  {
+    "name": "peck",
+    "type": "Flying",
+    "power": 35,
+    "accuracy": 100,
+    "pp": 35,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "low-kick",
+    "type": "Fighting",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "Inflicts more damage to heavier targets, with a maximum of 120 power."
+  },
+  {
+    "name": "razor-leaf",
+    "type": "Grass",
+    "power": 55,
+    "accuracy": 95,
+    "pp": 25,
+    "damage_class": "Physical",
+    "effect": "Has an increased chance for a critical hit."
+  },
+  {
+    "name": "solar-beam",
+    "type": "Grass",
+    "power": 120,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Special",
+    "effect": "Requires a turn to charge before attacking."
+  },
+  {
+    "name": "toxic",
+    "type": "Poison",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Badly poisons the target, inflicting more damage every turn."
+  },
+  {
+    "name": "night-shade",
+    "type": "Ghost",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Special",
+    "effect": "Inflicts damage equal to the user\u2019s level."
+  },
+  {
+    "name": "double-team",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 15,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s evasion by one stage."
+  },
+  {
+    "name": "confuse-ray",
+    "type": "Ghost",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Confuses the target."
+  },
+  {
+    "name": "light-screen",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Reduces damage from special attacks by 50% for five turns."
+  },
+  {
+    "name": "haze",
+    "type": "Ice",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Resets all Pok\u00e9mon\u2019s stats, accuracy, and evasion."
+  },
+  {
+    "name": "swift",
+    "type": "Normal",
+    "power": 60,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Special",
+    "effect": "Never misses."
+  },
+  {
+    "name": "sky-attack",
+    "type": "Flying",
+    "power": 140,
+    "accuracy": 90,
+    "pp": 5,
+    "damage_class": "Physical",
+    "effect": "User charges for one turn before attacking.  Has a chance to make the target flinch."
+  },
+  {
+    "name": "rest",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 5,
+    "damage_class": "Status",
+    "effect": "User sleeps for two turns, completely healing itself."
+  },
+  {
+    "name": "substitute",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Transfers 1/4 of the user\u2019s max HP into a doll, protecting the user from further damage or status changes until it breaks."
+  }
+]

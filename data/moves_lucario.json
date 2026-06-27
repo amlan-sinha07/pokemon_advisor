@@ -1,0 +1,182 @@
+[
+  {
+    "name": "mega-punch",
+    "type": "Normal",
+    "power": 80,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "ice-punch",
+    "type": "Ice",
+    "power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to freeze the target."
+  },
+  {
+    "name": "thunder-punch",
+    "type": "Electric",
+    "power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "swords-dance",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s Attack by two stages."
+  },
+  {
+    "name": "mega-kick",
+    "type": "Normal",
+    "power": 120,
+    "accuracy": 75,
+    "pp": 5,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "headbutt",
+    "type": "Normal",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "body-slam",
+    "type": "Normal",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "take-down",
+    "type": "Normal",
+    "power": 90,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "User receives 1/4 the damage it inflicts in recoil."
+  },
+  {
+    "name": "bite",
+    "type": "Dark",
+    "power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "roar",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Immediately ends wild battles.  Forces trainers to switch Pok\u00e9mon."
+  },
+  {
+    "name": "hyper-beam",
+    "type": "Normal",
+    "power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "User foregoes its next turn to recharge."
+  },
+  {
+    "name": "low-kick",
+    "type": "Fighting",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "Inflicts more damage to heavier targets, with a maximum of 120 power."
+  },
+  {
+    "name": "counter",
+    "type": "Fighting",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "Inflicts twice the damage the user received from the last physical hit it took."
+  },
+  {
+    "name": "strength",
+    "type": "Normal",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "earthquake",
+    "type": "Ground",
+    "power": 100,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage and can hit Dig users."
+  },
+  {
+    "name": "dig",
+    "type": "Ground",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Physical",
+    "effect": "User digs underground, dodging all attacks, and hits next turn."
+  },
+  {
+    "name": "toxic",
+    "type": "Poison",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Badly poisons the target, inflicting more damage every turn."
+  },
+  {
+    "name": "psychic",
+    "type": "Psychic",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Special",
+    "effect": "Has a chance to lower the target\u2019s Special Defense by one stage."
+  },
+  {
+    "name": "agility",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s Speed by two stages."
+  },
+  {
+    "name": "quick-attack",
+    "type": "Normal",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  }
+]

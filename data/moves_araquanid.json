@@ -1,0 +1,182 @@
+[
+  {
+    "name": "headbutt",
+    "type": "Normal",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "body-slam",
+    "type": "Normal",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "bite",
+    "type": "Dark",
+    "power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "water-gun",
+    "type": "Water",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "damage_class": "Special",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "hydro-pump",
+    "type": "Water",
+    "power": 110,
+    "accuracy": 80,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "surf",
+    "type": "Water",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Special",
+    "effect": "Inflicts regular damage and can hit Dive users."
+  },
+  {
+    "name": "ice-beam",
+    "type": "Ice",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Special",
+    "effect": "Has a chance to freeze the target."
+  },
+  {
+    "name": "blizzard",
+    "type": "Ice",
+    "power": 110,
+    "accuracy": 70,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "Has a chance to freeze the target."
+  },
+  {
+    "name": "bubble-beam",
+    "type": "Water",
+    "power": 65,
+    "accuracy": 100,
+    "pp": 20,
+    "damage_class": "Special",
+    "effect": "Has a chance to lower the target\u2019s Speed by one stage."
+  },
+  {
+    "name": "hyper-beam",
+    "type": "Normal",
+    "power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "User foregoes its next turn to recharge."
+  },
+  {
+    "name": "toxic",
+    "type": "Poison",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Badly poisons the target, inflicting more damage every turn."
+  },
+  {
+    "name": "double-team",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 15,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s evasion by one stage."
+  },
+  {
+    "name": "reflect",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Reduces damage from physical attacks by half."
+  },
+  {
+    "name": "waterfall",
+    "type": "Water",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "leech-life",
+    "type": "Bug",
+    "power": 80,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Physical",
+    "effect": "Drains half the damage inflicted to heal the user."
+  },
+  {
+    "name": "bubble",
+    "type": "Water",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 30,
+    "damage_class": "Special",
+    "effect": "Has a chance to lower the target\u2019s Speed by one stage."
+  },
+  {
+    "name": "rest",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 5,
+    "damage_class": "Status",
+    "effect": "User sleeps for two turns, completely healing itself."
+  },
+  {
+    "name": "substitute",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Transfers 1/4 of the user\u2019s max HP into a doll, protecting the user from further damage or status changes until it breaks."
+  },
+  {
+    "name": "spider-web",
+    "type": "Bug",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Prevents the target from leaving battle."
+  },
+  {
+    "name": "snore",
+    "type": "Normal",
+    "power": 50,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Special",
+    "effect": "Has a chance to make the target flinch.  Only works if the user is sleeping."
+  }
+]

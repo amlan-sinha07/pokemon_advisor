@@ -1,0 +1,182 @@
+[
+  {
+    "name": "mega-punch",
+    "type": "Normal",
+    "power": 80,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "fire-punch",
+    "type": "Fire",
+    "power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to burn the target."
+  },
+  {
+    "name": "thunder-punch",
+    "type": "Electric",
+    "power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "scratch",
+    "type": "Normal",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 35,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "swords-dance",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s Attack by two stages."
+  },
+  {
+    "name": "cut",
+    "type": "Normal",
+    "power": 50,
+    "accuracy": 95,
+    "pp": 30,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "wing-attack",
+    "type": "Flying",
+    "power": 60,
+    "accuracy": 100,
+    "pp": 35,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "fly",
+    "type": "Flying",
+    "power": 90,
+    "accuracy": 95,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "User flies high into the air, dodging all attacks, and hits next turn."
+  },
+  {
+    "name": "mega-kick",
+    "type": "Normal",
+    "power": 120,
+    "accuracy": 75,
+    "pp": 5,
+    "damage_class": "Physical",
+    "effect": "Inflicts regular damage with no additional effect."
+  },
+  {
+    "name": "headbutt",
+    "type": "Normal",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "body-slam",
+    "type": "Normal",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "take-down",
+    "type": "Normal",
+    "power": 90,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "User receives 1/4 the damage it inflicts in recoil."
+  },
+  {
+    "name": "double-edge",
+    "type": "Normal",
+    "power": 120,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "User receives 1/3 the damage inflicted in recoil."
+  },
+  {
+    "name": "leer",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Lowers the target\u2019s Defense by one stage."
+  },
+  {
+    "name": "bite",
+    "type": "Dark",
+    "power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "growl",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 40,
+    "damage_class": "Status",
+    "effect": "Lowers the target\u2019s Attack by one stage."
+  },
+  {
+    "name": "roar",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Immediately ends wild battles.  Forces trainers to switch Pok\u00e9mon."
+  },
+  {
+    "name": "ember",
+    "type": "Fire",
+    "power": 40,
+    "accuracy": 100,
+    "pp": 25,
+    "damage_class": "Special",
+    "effect": "Has a chance to burn the target."
+  },
+  {
+    "name": "flamethrower",
+    "type": "Fire",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Special",
+    "effect": "Has a chance to burn the target."
+  },
+  {
+    "name": "hyper-beam",
+    "type": "Normal",
+    "power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "User foregoes its next turn to recharge."
+  }
+]

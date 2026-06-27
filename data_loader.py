@@ -3,7 +3,7 @@ import json
 from models.pokemon import Pokemon
 from models.move import Move
 from difflib import get_close_matches
-
+import time 
 def search_pokemon(partial: str)->list:
     with open("data/pokemon_all.json","r",encoding="utf-8") as f:
         all_pokemon = json.load(f)
@@ -138,6 +138,7 @@ def get_move(move_name: str)->dict:
         if response.status_code != 200:
             return None
         data=response.json()
+        time.sleep(0.2)
 
         effect = ""
 
@@ -158,10 +159,13 @@ def get_move(move_name: str)->dict:
              #        if data["effect_entries"] else ""
         }
 def get_move_fuzzy(move_name:str)->dict:
+    move_name_clean = move_name.lower().replace(" ","-")
+    move=get_move(move_name_clean)
+    if move:
+        return move
     from difflib import get_close_matches
     import glob
-    move_name_clean = move_name.lower().replace(" ","-")
-
+    
     all_moves_names=[]
     for filepath in glob.glob("data/moves_*.json"):
         with open(filepath,"r",encoding="utf-8") as f:
@@ -169,6 +173,11 @@ def get_move_fuzzy(move_name:str)->dict:
         for move in moves:
             if move["name"] not in all_moves_names:
                 all_moves_names.append(move["name"])
+    if not all_moves_names :
+        print(f"move {move_name} not found")
+        return None
+    
+
 
     if move_name_clean in all_moves_names:
         return get_move(move_name_clean)
@@ -176,18 +185,26 @@ def get_move_fuzzy(move_name:str)->dict:
     matches=get_close_matches(move_name_clean,
                               all_moves_names,
                               n=5,
-                              cutoff=0.5)
+                              cutoff=0.4)
     if not matches:
-        return get_move(move_name_clean)
-
+        print(f"move {move_name} not found")
+        return None
     if len(matches) ==1:
         print(f"assuming move:{matches[0]}")
         return get_move(matches[0])
     print("did you mean:")
     for i,m in enumerate(matches):
         print(f" {i+1}.{m}")
-    choice=input=input("choose (1-5): ").strip()
+    choice=input("choose (1-5): ").strip()
     try:
         return get_move(matches[int(choice)-1])
     except:
         return get_move(matches[0])        
+    
+from data_loader import get_pokemon_moves 
+
+pokemon_to_fetch=[]
+for name in pokemon_to_fetch:
+    print(f"fetching moves for {name}...")
+    get_pokemon_moves(name)
+    print(f"done")

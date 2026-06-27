@@ -1,0 +1,182 @@
+[
+  {
+    "name": "ice-punch",
+    "type": "Ice",
+    "power": 75,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to freeze the target."
+  },
+  {
+    "name": "headbutt",
+    "type": "Normal",
+    "power": 70,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "body-slam",
+    "type": "Normal",
+    "power": 85,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Physical",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "take-down",
+    "type": "Normal",
+    "power": 90,
+    "accuracy": 85,
+    "pp": 20,
+    "damage_class": "Physical",
+    "effect": "User receives 1/4 the damage it inflicts in recoil."
+  },
+  {
+    "name": "leer",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Lowers the target\u2019s Defense by one stage."
+  },
+  {
+    "name": "bite",
+    "type": "Dark",
+    "power": 60,
+    "accuracy": 100,
+    "pp": 25,
+    "damage_class": "Physical",
+    "effect": "Has a chance to make the target flinch."
+  },
+  {
+    "name": "ice-beam",
+    "type": "Ice",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Special",
+    "effect": "Has a chance to freeze the target."
+  },
+  {
+    "name": "blizzard",
+    "type": "Ice",
+    "power": 110,
+    "accuracy": 70,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "Has a chance to freeze the target."
+  },
+  {
+    "name": "hyper-beam",
+    "type": "Normal",
+    "power": 150,
+    "accuracy": 90,
+    "pp": 5,
+    "damage_class": "Special",
+    "effect": "User foregoes its next turn to recharge."
+  },
+  {
+    "name": "thunderbolt",
+    "type": "Electric",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Special",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "thunder-wave",
+    "type": "Electric",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Paralyzes the target."
+  },
+  {
+    "name": "thunder",
+    "type": "Electric",
+    "power": 110,
+    "accuracy": 70,
+    "pp": 10,
+    "damage_class": "Special",
+    "effect": "Has a chance to paralyze the target."
+  },
+  {
+    "name": "toxic",
+    "type": "Poison",
+    "power": 0,
+    "accuracy": 90,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Badly poisons the target, inflicting more damage every turn."
+  },
+  {
+    "name": "psychic",
+    "type": "Psychic",
+    "power": 90,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Special",
+    "effect": "Has a chance to lower the target\u2019s Special Defense by one stage."
+  },
+  {
+    "name": "night-shade",
+    "type": "Ghost",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 15,
+    "damage_class": "Special",
+    "effect": "Inflicts damage equal to the user\u2019s level."
+  },
+  {
+    "name": "double-team",
+    "type": "Normal",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 15,
+    "damage_class": "Status",
+    "effect": "Raises the user\u2019s evasion by one stage."
+  },
+  {
+    "name": "confuse-ray",
+    "type": "Ghost",
+    "power": 0,
+    "accuracy": 100,
+    "pp": 10,
+    "damage_class": "Status",
+    "effect": "Confuses the target."
+  },
+  {
+    "name": "light-screen",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Reduces damage from special attacks by 50% for five turns."
+  },
+  {
+    "name": "haze",
+    "type": "Ice",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 30,
+    "damage_class": "Status",
+    "effect": "Resets all Pok\u00e9mon\u2019s stats, accuracy, and evasion."
+  },
+  {
+    "name": "reflect",
+    "type": "Psychic",
+    "power": 0,
+    "accuracy": 0,
+    "pp": 20,
+    "damage_class": "Status",
+    "effect": "Reduces damage from physical attacks by half."
+  }
+]
