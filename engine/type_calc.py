@@ -42,4 +42,20 @@ class TypeCalculator:
         
         e2=self.effectiveness(attacking_type,defend_type2)
         return e1*e2
-        
+'''
+Module: type_calc.py
+
+Responsibilities:
+- Calculates type effectiveness multipliers for single and dual-type Pokémon matchups.
+- Loads and manages the Pokémon type interaction matrix from local JSON configuration.
+
+Dependencies:
+- standard -> json, os
+
+Known problems:
+- Inefficient $O(N)$ lookup: Iterates through all dictionary keys on every call to `effectiveness` to perform case-insensitive matching, rather than normalizing keys once at initialization.
+- Missing error handling for file I/O: `__init__` lacks exception handling if `type_chart.json` is missing or corrupted.
+
+Testing:
+- No automated tests currently documented.
+'''

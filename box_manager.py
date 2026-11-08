@@ -1,7 +1,7 @@
 import json
 import os
 
-box_file="my_box.json"
+from data import my_box as box_file
 
 def load_box() -> list:
     if not os.path.exists(box_file):
@@ -45,3 +45,21 @@ def view_box():
     print(f"\n=== YOUR BOX ({len(box)}/6) ===")
     for i , name in enumerate(box):
         print(f"    {i+1}.  {name}")
+'''
+Module: box_manager.py
+
+Responsibilities:
+- Manages local Pokémon team/box storage (persisting, loading, adding, removing, and viewing team members).
+- Enforces team size limits (max 6 Pokémon).
+
+Dependencies:
+- standard -> json, os
+
+Known problems:
+- `load_box()` lacks `json.JSONDecodeError` handling; if `my_box.json` is empty or corrupted, the program will crash.
+- Tight coupling of persistence logic with UI output (`print` inside `save_box`).
+- Hardcoded relative path (`my_box.json`) can cause file-not-found errors if run from a different working directory.
+
+Testing:
+- No automated tests currently documented.
+'''

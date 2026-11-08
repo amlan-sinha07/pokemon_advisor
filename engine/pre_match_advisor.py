@@ -63,4 +63,22 @@ class PreMatchAdvisor:
             print(f" {pokemon.name} (score: {score})")
             recommended.append(pokemon)
         return recommended
-        
+'''
+Module: pre_match_advisor.py
+
+Responsibilities:
+- Evaluates individual and team matchups between the player's Pokémon and an opponent team using type effectiveness and speed advantages.
+- Recommends the optimal subset of Pokémon to bring into battle based on cumulative matchup scores.
+
+Dependencies:
+- engine -> type_calc.py, damage_calc.py
+- models -> pokemon.py
+
+Known problems:
+- Module docstring header mismatch: The docstring labels the module as `advisor.py` while the script manages pre-match team selection and analysis.
+- Tight coupling with I/O: Hardcoded `print()` statements are embedded directly inside the `recommend()` recommendation method.
+- Fragile dual-type offensive and defensive scoring loops: `score_matchup` iterates through types without accounting for dual-type coverage redundancy or specific move pool selections.
+
+Testing:
+- No automated tests currently documented.
+'''

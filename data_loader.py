@@ -208,3 +208,23 @@ for name in pokemon_to_fetch:
     print(f"fetching moves for {name}...")
     get_pokemon_moves(name)
     print(f"done")
+'''
+Module: data_loader.py
+
+Responsibilities:
+- Loads Pokémon entities and moves from local JSON caches or data stores.
+- Provides fuzzy matching for Pokémon names and move names using `difflib`.
+- Falls back to live network requests (PokéAPI) if move or Pokémon data is missing locally.
+
+Dependencies:
+- standard -> os, json, time, glob, difflib
+- external -> requests
+- internal -> models.pokemon -> Pokemon, models.move -> Move, scraper.fetch_data -> fetch_moves_for_pokemon
+
+Known problems:
+- Nested loop bug in `get_move`: the network fetch block is incorrectly indented *inside* the file-reading loop, causing it to prematurely fetch or return on the very first file checked if the move isn't found immediately.
+- Global scope import leak: `from data_loader import get_pokemon_moves` at the bottom of the module imports from itself, and `pokemon_to_fetch` is an empty uninitialized list.
+
+Testing:
+- No automated tests currently documented.
+'''

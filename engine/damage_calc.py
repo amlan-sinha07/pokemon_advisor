@@ -76,4 +76,22 @@ class DamageCalculator:
             "note":note,
             "engine":engine
         }
-    
+'''
+Module: damage_calc.py
+
+Responsibilities:
+- Calculates battle damage for Pokémon moves using either a high-performance C++ backend binary (`damage_calc.exe`) or a Python fallback formula.
+- Integrates type effectiveness multipliers and Same-Type Attack Bonus (STAB).
+
+Dependencies:
+- standard -> subprocess, os
+- internal -> models.pokemon -> Pokemon, models.move -> Move, engine.type_calc -> TypeCalculator
+
+Known problems:
+- Fragile subprocess communication: `input=input_str` is passed without a trailing newline, which can cause `std::cin` in the C++ binary to hang or fail depending on stream buffering.
+- Missing exception handling for subprocess output: `int(result.stdout.strip())` will crash with a `ValueError` if the C++ executable prints warning logs, debug text, or returns malformed data.
+- Lacks returncode checking on `subprocess.run()` to catch binary execution errors.
+
+Testing:
+- No automated tests currently documented.
+'''

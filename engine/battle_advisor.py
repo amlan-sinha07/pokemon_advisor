@@ -55,3 +55,22 @@ class BattleAdvisor:
               f"({best['note']}, "
               f"~ {best['damage']} damage) <<<")
         return best
+'''
+Module: advisor.py
+
+Responsibilities:
+- Analyzses combat state between an attacker and defender Pokémon, evaluating speed advantages and move damage outputs.
+- Recommends the optimal move based on damage sorting.
+
+Dependencies:
+- engine -> damage_calc.py
+- models -> move.py
+- models -> pokemon.py
+
+Known problems:
+- Tight coupling with I/O: Contains hardcoded `print()` statements directly inside domain advice generation logic, limiting reusability in GUI or web endpoints.
+- Unhandled edge case: Assumes `results` is never empty; if `moves` list is empty, sorting or accessing `results[0]` would throw an `IndexError`.
+
+Testing:
+- No automated tests currently documented.
+'''

@@ -27,10 +27,25 @@ class Pokemon:
     def take_damage(self, damage: int):
         self.current_hp = max(0, self.current_hp - damage)
         print(f"{self.name} took {damage} damage! "
-              f"HP: {self.current_hp}/{self.stats['hp']}")
-        
-       
+              f"HP: {self.current_hp}/{self.stats['hp']}")    
     def __str__(self):
         return (f"{self.name}"
                 f"[{'/'.join(self.types)}]"
                 f"HP: {self.current_hp}/{self.stats['hp']}")
+'''
+Module: pokemon.py
+
+Responsibilities:
+- Models a Pokémon entity, managing its core attributes, stats, type matchups, and move pool.
+- Handles state changes during battle (HP tracking, damage calculation, healing, and move learning).
+
+Dependencies:
+- models -> move.py
+
+Known problems:
+- Redundancy between the `max_hp` parameter and `stats["hp"]`.
+- Tight coupling of I/O operations (`print`) inside domain logic methods (`take_damage`, `learn_move`).
+
+Testing:
+- No automated tests currently documented (Unit tests recommended for state changes, HP boundaries, and move limits).
+'''

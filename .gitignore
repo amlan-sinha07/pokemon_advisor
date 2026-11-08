@@ -1,0 +1,11 @@
+__pycache__/box_manager.cpython-311.pyc
+__pycache__/data_loader.cpython-311.pyc
+engine/__pycache__/advisor.cpython-311.pyc
+engine/__pycache__/battle_advisor.cpython-311.pyc
+engine/__pycache__/damage_calc.cpython-311.pyc
+engine/__pycache__/type_calc.cpython-311.pyc
+models/__pycache__/move.cpython-311.pyc
+models/__pycache__/pokemon.cpython-311.pyc
+my_box.json
+.vscode/settings.json
+requirements.txt

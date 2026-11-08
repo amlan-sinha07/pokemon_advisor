@@ -52,7 +52,7 @@ from engine.type_calc import TypeCalculator
 # # # #
 # # # #
 # # # #
-from engine.advisor import PreMatchAdvisor
+from engine.pre_match_advisor import PreMatchAdvisor
 from data_loader import load_pokemon
 
 # advisor = PreMatchAdvisor()
@@ -102,7 +102,7 @@ from models.move import Move
 
 from data_loader import load_pokemon,load_pokemon_fuzzy,get_move_fuzzy
 import sys
-from engine.advisor import PreMatchAdvisor
+from engine.pre_match_advisor import PreMatchAdvisor
 from engine.battle_advisor import BattleAdvisor
 from data_loader import load_pokemon_fuzzy,load_pokemon
 from data_loader import search_pokemon
@@ -110,6 +110,7 @@ from models.move import Move
 from box_manager import load_box,add_to_box,remove_from_box,view_box
 
 def pre_match_mode():
+    breakpoint()
     print("\n=== PRE-MATCH TEAM SELECTOR ===")
 
     box=load_box()
@@ -159,6 +160,7 @@ def pre_match_mode():
     advisor = PreMatchAdvisor()
     return advisor.recommend(my_team,opp_team)
 def battle_mode():
+    breakpoint()
     print("\n=== IN-BATTLE MOVE ADVISOR ===")
     my_name = input("your active pokemon: ").strip().lower()
     my_pokemon = load_pokemon_fuzzy(my_name)

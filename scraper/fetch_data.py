@@ -125,3 +125,22 @@ def fetch_moves_for_pokemon(pokemon_name:str) ->list:
 #     all_pokemon_ids = [str(i) for i in range(1, generation_9_max + 1)]
     
 #     fetch_and_save(all_pokemon_ids, "data/pokemon_all.json")
+'''
+Module: fetch_data.py
+
+Responsibilities:
+- Fetches Pokémon metadata and move details from the PokéAPI (pokeapi.co).
+- Handles local disk caching, incremental saving, and rate limiting to prevent API blocking.
+
+Dependencies:
+- external -> requests
+- standard -> json, os, time
+
+Known problems:
+- Cache check bug: `all_pokemon` keys are Pokémon names (e.g., "bulbasaur"), but `pokemon_ids` contains numeric IDs (e.g., 1, 2), causing the cache lookup to fail.
+- I/O bottleneck: `json.dump()` is called inside the loop on every single iteration, leading to excessive disk writes.
+- Lacks connection pooling (`requests.Session`).
+
+Testing:
+- No automated tests currently documented.
+'''

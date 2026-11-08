@@ -16,3 +16,19 @@ class Move:
                 f"Power:{self.power}    "
                 f"Cat:{self.category}   "
                 f"Acc:{self.accuracy}   ")
+    '''
+Module: move.py
+
+Responsibilities:
+- class for moves according to game
+
+
+Dependencies:
+
+
+Known problems:
+
+
+Testing:
+- No automated tests currently documented.
+'''
