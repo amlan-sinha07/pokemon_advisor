@@ -1,7 +1,7 @@
 import json
 import os
 
-from data import my_box as box_file
+box_file="my_box.json"
 
 def load_box() -> list:
     if not os.path.exists(box_file):

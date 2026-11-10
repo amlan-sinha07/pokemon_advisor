@@ -110,7 +110,7 @@ from models.move import Move
 from box_manager import load_box,add_to_box,remove_from_box,view_box
 
 def pre_match_mode():
-    breakpoint()
+    # breakpoint()
     print("\n=== PRE-MATCH TEAM SELECTOR ===")
 
     box=load_box()
@@ -160,7 +160,7 @@ def pre_match_mode():
     advisor = PreMatchAdvisor()
     return advisor.recommend(my_team,opp_team)
 def battle_mode():
-    breakpoint()
+    # import ipdb; ipdb.set_trace()
     print("\n=== IN-BATTLE MOVE ADVISOR ===")
     my_name = input("your active pokemon: ").strip().lower()
     my_pokemon = load_pokemon_fuzzy(my_name)
@@ -321,4 +321,7 @@ from data_loader import get_move_fuzzy
 #     opp_hp=int(input(f"opponent hp (max {opp_pokemon.stats['hp']}): \n"))
 #     opp_pokemon.current_hp=opp_hp
 
-    
+# after def you can write ipdb for debugging
+# import ipdb; ipdb.set_trace()
+
+#next question modular monolist q4
