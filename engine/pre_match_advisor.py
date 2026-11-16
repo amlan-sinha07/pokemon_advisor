@@ -2,13 +2,11 @@
 #
 #
 from engine.type_calc import TypeCalculator
-from engine.damage_calc import DamageCalculator
 from models.pokemon import Pokemon
 
 class PreMatchAdvisor:
     def __init__(self):
         self.type_calc=TypeCalculator()
-        self.damage_calc=DamageCalculator()
     def score_matchup(self,my_pokemon:Pokemon,
                       opponent:Pokemon)->float:
         score=0.0
@@ -40,6 +38,8 @@ class PreMatchAdvisor:
         return round(total,2)
     def recommend(self, my_team:list,
                   opponent_team:list,pick=4)->list:
+        if not isinstance(pick,int) or isinstance(pick,bool) or pick<1 :
+            raise ValueError("pick must be a positive integer")
         scores=[]
         for pokemon in my_team:
             score = self.score_vs_team(pokemon,opponent_team)
@@ -75,10 +75,8 @@ Dependencies:
 - models -> pokemon.py
 
 Known problems:
-- Module docstring header mismatch: The docstring labels the module as `advisor.py` while the script manages pre-match team selection and analysis.
-- Tight coupling with I/O: Hardcoded `print()` statements are embedded directly inside the `recommend()` recommendation method.
-- Fragile dual-type offensive and defensive scoring loops: `score_matchup` iterates through types without accounting for dual-type coverage redundancy or specific move pool selections.
+- None
 
 Testing:
-- No automated tests currently documented.
+- tests/test_pre_match_advisor.py.
 '''

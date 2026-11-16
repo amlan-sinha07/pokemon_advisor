@@ -2,14 +2,19 @@
 #
 from engine.damage_calc import DamageCalculator
 from models.pokemon import Pokemon
-from models.move import Move
 
 class BattleAdvisor:
     def __init__(self):
         self.damage_calc= DamageCalculator()
-    def recommend_move(self,attacker:Pokemon,
-                       defender:Pokemon,
-                       moves:list)->dict:
+    def recommend_move(
+            self,
+            attacker:Pokemon,
+            defender:Pokemon,
+            moves:list
+        )->dict:
+        if not moves:
+            print("\nNo moves availble for analysis")
+            return None
         print(f"\n=== BATTLE ADVISOR ===")
         print(f"Your : {attacker.name} "
               f"HP: {attacker.current_hp}/{attacker.stats['hp']}")
@@ -56,7 +61,7 @@ class BattleAdvisor:
               f"~ {best['damage']} damage) <<<")
         return best
 '''
-Module: advisor.py
+Module: battle_advisor.py
 
 Responsibilities:
 - Analyzses combat state between an attacker and defender Pokémon, evaluating speed advantages and move damage outputs.
@@ -68,9 +73,8 @@ Dependencies:
 - models -> pokemon.py
 
 Known problems:
-- Tight coupling with I/O: Contains hardcoded `print()` statements directly inside domain advice generation logic, limiting reusability in GUI or web endpoints.
-- Unhandled edge case: Assumes `results` is never empty; if `moves` list is empty, sorting or accessing `results[0]` would throw an `IndexError`.
+- None
 
 Testing:
-- No automated tests currently documented.
+- tests/test_battle_advisor.py
 '''

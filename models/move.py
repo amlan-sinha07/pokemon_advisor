@@ -1,5 +1,17 @@
+"""
+Module: move.py
 
-#
+Responsibilities:
+- Represents a Pokemon move.
+- Stores move attributes.
+- Determines whether a move deals direct damage.
+
+Dependencies:
+- None
+
+Testing:
+- Covered by tests/test_move.py.
+"""
 class Move:
     def __init__(self,name:str,move_type:str,
                  power:int,category:str,accuracy:int):
@@ -16,19 +28,3 @@ class Move:
                 f"Power:{self.power}    "
                 f"Cat:{self.category}   "
                 f"Acc:{self.accuracy}   ")
-    '''
-Module: move.py
-
-Responsibilities:
-- class for moves according to game
-
-
-Dependencies:
-
-
-Known problems:
-
-
-Testing:
-- No automated tests currently documented.
-'''

@@ -1,26 +1,44 @@
 #include <iostream>
-#include <string>
 #include <cmath>
+
 using namespace std;
 
-float calculate_damage(int power,int atk,
-                    int def_stat,float effectiveness, float stab){
-    float float_power= static_cast<float>(power);
-
-    float base=((2.0f*50 / 5 +2 )*power*atk/(float)def_stat)/50+2;
-    cout<< "C++ Raw Base Damge: "<<base<<endl;
-    float final_damage =base *stab *effectiveness;
+int calculate_damage(
+    int power,
+    int atk,
+    int def_stat,
+    double effectiveness,
+    double stab
+) {
+    double base=
+    (((2.0 * 50 / 5 + 2 )*power*atk/ def_stat)/50)+2;
+    double final_damage =base *stab *effectiveness;
     return static_cast<int>(std::round(final_damage));
 }
 int main(){
     int power, atk, def_stat;
-    float effectiveness ,stab;
+    double effectiveness ,stab;
 
-    cin>> power >> atk >> def_stat >> effectiveness >>stab;
+    if (!(std::cin>>power>>atk>>def_stat>>
+    effectiveness>>stab)){
+        std::cerr<<"Invalid input received.\n";
+        return 1;
+    }
+    if (power<0 || atk<=0 || def_stat<=0 ||
+        effectiveness<0 ||stab<=0){
+            std::cerr<< "Invalid damage parameters\n";
+            return 1;
+        }
 
-    int damage = calculate_damage(power, atk, def_stat,effectiveness,stab);
+    int damage = calculate_damage(
+        power,
+        atk,
+        def_stat,
+        effectiveness,
+        stab
+    );
 
-    cout<< damage << endl;
+    std::cout<< damage << '\n';
     return 0;
 }
 /*

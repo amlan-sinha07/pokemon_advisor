@@ -1,130 +1,172 @@
-#
-#
-#
 import requests
 import json
-import os
 import time
 
-def fetch_pokemon(name:str)->dict:
-    url=f"https://pokeapi.co/api/v2/pokemon/{name.lower()}"
-    response=requests.get(url)
-    if response.status_code !=200:
-        print(f"failed to fetch {name}")
+from pathlib import Path
+
+PROJECT_ROOT=Path(__file__).resolve().parents[1]
+DATA_DIR=PROJECT_ROOT / "data"
+POKEMON_FILE=DATA_DIR / "pokemon_all.json"
+REQUEST_TIMEOUT=10
+def _get_json(url:str)->dict|None:
+    try:
+        response=requests.get(
+            url,
+            timeout=REQUEST_TIMEOUT
+        )
+        response.raise_for_status()
+        data=response.json()
+    except (requests.RequestException, ValueError) as exc:
+        print(f"API requests failed: {exc}")
         return None
-    data=response.json()
-    pokemon={
-        "name":data["name"],
-        "types":[t["type"]["name"].capitalize()
-                 for t in data["types"]],
-        "stats": {
-            "hp": next (s["base_stat"] for s in data["stats"]
-                        if s["stat"]["name"]=="hp"),
-            "atk": next(s["base_stat"] for s in data["stats"]
-                       if s["stat"]["name"]=="attack"),
-            "def": next(s["base_stat"] for s in data["stats"]
-                        if s["stat"]["name"]=="defense"),
-            "spa": next(s["base_stat"] for s in data["stats"]
-                        if s["stat"]["name"]=="special-attack"),
-            "spd": next(s["base_stat"] for s in data["stats"]
-                        if s["stat"]["name"]=="special-defense"),
-            "spe": next(s["base_stat"] for s in data["stats"]
-                        if s["stat"]["name"]=="speed"),            
-            
-        },
-        "moves": [m["move"]["name"] for m in data["moves"]]
+    if not isinstance(data,dict):
+        print("API returned unexpected json data")
+        return None
+    return data
+def fetch_pokemon(name:str)->dict | None:
+    identifier=str(name).strip().lower()
+    url=f"https://pokeapi.co/api/v2/pokemon/{identifier}"
+    data=_get_json(url)
+    if data is None:
+        return None
+    stat_mapping={
+        "hp":"hp",
+        "attack":"atk",
+        "defense":"def",
+        "special-attack":"spa",
+        "special-defense":"spd",
+        "speed":"spe"
     }
-    return pokemon
-
-
+    stats={}
+    for item in data.get("stats",[]):
+        api_name=item.get("stat",{}).get("name")
+        if api_name in stat_mapping:
+            stats[stat_mapping[api_name]]=item["base_stat"]
+    required_stats={"hp","atk","def","spa","spd","spe"}
+    if not required_stats.issubset(stats):
+        print(f"Incomplete stats for {identifier}")
+        return None
+    pokemon_name=data.get("name")
+    if not isinstance(pokemon_name,str) or not pokemon_name:
+        return None
+    return {
+        "id":data.get("id",[]),
+        "name":data.get("name",[]),
+        "types":[
+            item["type"]["name"].capitalize()
+            for item in data.get("types",[])
+        ],
+        "stats":stats,
+        "moves":[
+            item["move"]["name"]
+            for item in data.get("moves",[])
+        ]
+    }
 def fetch_and_save(pokemon_ids: list, output_path: str):
+    output_file=Path(output_path)
+    if not output_file.is_absolute():
+        output_file=PROJECT_ROOT/output_file
     all_pokemon = {}
-    if os.path.exists(output_path):
+    if output_file.exists():
         try:
-            with open(output_path, "r", encoding="utf-8") as f:
+            with output_file.open("r", encoding="utf-8") as f:
                 all_pokemon = json.load(f)
-            print(f"Found existing data. Loaded {len(all_pokemon)} Pokémon.")
-        except json.JSONDecodeError:
+            if not isinstance(data,dict):
+                raise ValueError("Database must be dictionary.")
+            print(
+                f"Found existing data. Loaded {len(all_pokemon)} Pokémon."
+            )
+        except (json.JSONDecodeError,ValueError):
             print("Existing file was corrupted or empty. Starting fresh.")
-
+            all_pokemon={}
+    cached_ids=set()
+    cached_names={
+        str(name).lower()
+        for name in all_pokemon
+    }
+    for item in all_pokemon.values():
+        if isinstance(item,dict) and item.get("id") is not None:
+            cached_ids.add(str(item["id"]))
     total = len(pokemon_ids)
-    
+    pending_saves=0
+    output_file.parent.mkdir(parents=True,exist_ok=True)
     for i, p_id in enumerate(pokemon_ids):
-        if str(p_id) in all_pokemon or p_id.lower() in all_pokemon:
+        identifier=str(p_id).strip().lower()
+        if identifier in cached_ids or identifier in cached_names:
             continue
-            
         print(f"Fetching ID {p_id} ({i+1}/{total})...")
         data = fetch_pokemon(p_id)
-        
         if data:
             all_pokemon[data["name"]] = data
-            
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
-            with open(output_path, "w", encoding="utf-8") as f:
+            cached_names.add(data["name"].lower())
+            if data.get("id") is not None:
+                cached_ids.add(str(data["id"]))
+            pending_saves += 1
+        if pending_saves>25:
+            with output_file.open("w", encoding="utf-8") as f:
                 json.dump(all_pokemon, f, indent=2)
-                
+            pending_saves=0
         time.sleep(2)
-
-    print(f"\nDone! Total database size: {len(all_pokemon)} Pokémon.")
-def fetch_move(move_name: str)-> dict:
-    url=f"https://pokeapi.co/api/v2/move/{move_name.lower().replace(' ','-')}"
-    response = requests.get(url)
-    if response.status_code != 200:
+        if pending_saves>2:
+            with output_file.open("w",encoding="utf-8") as f:
+                json.dump(all_pokemon,f,indent=2)
+    print(
+        f"\nDone! Total database size: {len(all_pokemon)} Pokémon."
+    )
+def fetch_move(move_name: str)-> dict | None:
+    move_slug=move_name.strip().lower().replace(" ","-")
+    url=f"https://pokeapi.co/api/v2/move/{move_slug}"
+    data=_get_json(url)
+    if data is None:
         return None
-    
-    data = response.json()
-
     effect_text = ""
-    if data.get("effect_entries"):
-        for entry in data["effect_entries"]:
-            if entry["language"]["name"] == "en":
-                effect_text = entry["short_effect"]
-                break
-
+    for entry in data.get("effect_entries",[]):
+        if entry.get("language",{}).get("name")=="en":
+            effect_text=entry.get("short_effect","")
+            break
     return {
         "name": data["name"],
-        "type": data["type"]["name"].capitalize(),
-        "power": data["power"] or 0,
-        "accuracy": data["accuracy"] or 0,
-        "pp": data["pp"],
-        "damage_class": data["damage_class"]["name"].capitalize(),
+        "type": data.get("type",{}).get("name","normal").capitalize(),
+        "power": data.get("power") or 0,
+        "accuracy": data.get("accuaracy") or 0,
+        "pp": data.get("pp") or 0,
+        "damage_class": data.get(
+            "damage_class",{}
+        ).get("name","physical").capitalize(),
         "effect": effect_text,
     }
-def fetch_moves_for_pokemon(pokemon_name:str) ->list:
-    with open("data/pokemon_all.json","r",encoding="utf-8") as f:
-        all_pokemon = json.load(f)
-    
-    if pokemon_name not in all_pokemon:
-        print(
-            f"Debug Error: '{pokemon_name}' not found in pokemon_all.json keys!"
-        )
-        print(f"Availbale keys snippet: {list(all_pokemon.keys())[:5]}")
-        return []
-    
-    move_names = all_pokemon[pokemon_name]["moves"][:20]
-    moves = []
-
-    print(f"found {len(move_names)} moves to fetch for {pokemon_name}...")
-    
+def fetch_moves_for_pokemon(
+        pokemon_name:str
+    ) ->list[dict] | None:
+    try :
+        with POKEMON_FILE.open("r",encoding="utf-8") as f:
+            all_pokemon=json.load(f)
+    except (FileNotFoundError,json.JSONDecodeError) as exc:
+        print(f"Could not load Pokemon database: {exc}")
+        return None
+    if not isinstance(all_pokemon,dict):
+        return None
+    name=pokemon_name.strip().lower()
+    pokemon_data=all_pokemon.get(name)
+    if pokemon_data is None:
+        print(f"pokemon '{name}' not found in database")
+        return None
+    move_names=pokemon_data.get("moves",[])[:20]
+    if not isinstance(move_names,list):
+        return None
+    moves=[]
+    print(f"Found {len(move_names)} moves for {name}...")
     for move_name in move_names:
-        print(f"    fetching move: {move_name}...")
-        move = fetch_move(move_name)
-        
-        if move is None:
-            print(f"    warning: fetch_move('{move_name}) returned None!")
-        
-        if move:
+        print(f"Fetching move: {move_name}")
+        move=fetch_move(move_name)
+        if move is not None :
             moves.append(move)
-        
         time.sleep(0.2)
-    
-    print(f"succesfully fetched {len(moves)} out of {len(move_names)} moves.")
+    print(
+        f"Successfully fetched {len(moves)}"
+        f"out of {len(move_names)} moves."
+    )
     return moves
-# if __name__ == "__main__":
-#     generation_9_max = 1025
-#     all_pokemon_ids = [str(i) for i in range(1, generation_9_max + 1)]
-    
-#     fetch_and_save(all_pokemon_ids, "data/pokemon_all.json")
 '''
 Module: fetch_data.py
 
