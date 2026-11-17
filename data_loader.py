@@ -235,10 +235,7 @@ Dependencies:
 - external -> requests
 - internal -> models.pokemon -> Pokemon, models.move -> Move, scraper.fetch_data -> fetch_moves_for_pokemon
 
-Known problems:
-- Nested loop bug in `get_move`: the network fetch block is incorrectly indented *inside* the file-reading loop, causing it to prematurely fetch or return on the very first file checked if the move isn't found immediately.
-- Global scope import leak: `from data_loader import get_pokemon_moves` at the bottom of the module imports from itself, and `pokemon_to_fetch` is an empty uninitialized list.
-
+Validate cached records; update documentation; remove unused imports.
 Testing:
 - No automated tests currently documented.
 '''

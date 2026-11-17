@@ -135,3 +135,4 @@ def test_get_move_from_cache(monkeypatch, tmp_path):
     result = data_loader.get_move("thunderbolt")
 
     assert result == expected
+'''Add malformed Pokémon records and cache validation.'''

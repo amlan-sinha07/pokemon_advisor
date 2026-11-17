@@ -28,7 +28,7 @@ class PreMatchAdvisor:
         #speed bonus
         if my_pokemon.stats["spe"]>opponent.stats["spe"]:
             score += 0.5
-        
+
         return round(score ,2)
     def score_vs_team(self,my_pokemon:Pokemon,
                       opponent_team:list)->float:
@@ -50,13 +50,13 @@ class PreMatchAdvisor:
         print(f"\nOpponent's team:")
         for opp in opponent_team:
             print(f" {opp.name} [{'/'.join(opp.types)}]")
-        
+
         print(f"\nYour team score:")
         for pokemon ,score in scores:
             print(f" {pokemon.name:<12} "
                   f"[{'/'.join(pokemon.types):<15}] "
                   f"score:{score}")
-            
+
         print(f"\n>>> BRING THESE {pick} POKEMON <<<")
         recommended = []
         for pokemon , score in scores[:pick]:
@@ -73,7 +73,7 @@ Responsibilities:
 Dependencies:
 - engine -> type_calc.py, damage_calc.py
 - models -> pokemon.py
-
+Improve	Document heuristic; correct dependency documentation.
 Known problems:
 - None
 

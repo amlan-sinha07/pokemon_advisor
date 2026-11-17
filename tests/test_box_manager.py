@@ -50,7 +50,31 @@ def test_box_capacity(box_path):
     ]
     box_manager.save_box(pokemon)
     box_manager.add_to_box("garchomp")
+    assert box_manager.load_box()==pokemon
+    assert len(box_manager.load_box())==6
 def test_remove_pokemon(box_path):
     box_manager.save_box(["pikachu","charizard"])
     box_manager.remove_from_box("pikachu")
     assert box_manager.load_box()==["charizard"]
+def test_save_box_rejects_more_than_six(box_path):
+
+    pokemon = [f"pokemon_{i}" for i in range(7)]
+
+    with pytest.raises(ValueError):
+        box_manager.save_box(pokemon)
+
+
+def test_load_box_rejects_more_than_six(box_path):
+
+    pokemon = [f"pokemon_{i}" for i in range(7)]
+
+    box_path.write_text(
+        json.dumps(pokemon),
+        encoding="utf-8"
+    )
+
+    with pytest.raises(ValueError):
+        box_manager.load_box()
+'''
+Capacity test ineffective
+'''

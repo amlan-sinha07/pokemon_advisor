@@ -38,7 +38,7 @@ class TypeCalculator:
         #if there is no second type then just return first effectiveness
         if defend_type2 is None or defend_type2=="":
             return e1
-        
+
         e2=self.effectiveness(attacking_type,defend_type2)
         return e1*e2
 """
@@ -52,7 +52,7 @@ Responsibilities:
 Dependencies:
 - json
 - os
-
+Improve	Improve file error reporting and validate defending types.
 Testing:
 - Covered by tests/test_type_calc.py.
 """

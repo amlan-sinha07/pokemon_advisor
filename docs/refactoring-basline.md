@@ -20,7 +20,7 @@
 
 ### Initial Testing Limitations
 
-- No automated regression test suite.
+- No automated regression suite.
 - Data loading depended on relative file paths.
 - Python-C++ integration lacked sufficient automated verification.
 

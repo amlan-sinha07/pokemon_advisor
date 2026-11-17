@@ -50,7 +50,7 @@ Responsibilities:
 
 Dependencies:
 - standard -> iostream, string, cmath
-
+Keep with cleanup	Remove obsolete documentation; retain numerical stdout protocol.
 Known problems:
 - Stdout pollution: Printing debug text ("C++ Raw Base Damge:") directly to `cout` corrupts the standard output stream, causing Python subprocess parsing (`int(result.stdout.strip())`) to crash with a `ValueError`.
 - Unused variable: `float_power` is declared but never used in the damage formula.

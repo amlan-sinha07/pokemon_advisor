@@ -161,3 +161,4 @@ def main():
             print("Invalid choice.")
 if __name__=="__main__":
     main()
+#Add minimum-team handling; remove debug output; add invalid menu handling.

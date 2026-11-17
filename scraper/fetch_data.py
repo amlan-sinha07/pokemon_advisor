@@ -50,8 +50,8 @@ def fetch_pokemon(name:str)->dict | None:
     if not isinstance(pokemon_name,str) or not pokemon_name:
         return None
     return {
-        "id":data.get("id",[]),
-        "name":data.get("name",[]),
+        "id":data.get("id"),
+        "name":pokemon_name,
         "types":[
             item["type"]["name"].capitalize()
             for item in data.get("types",[])
@@ -62,7 +62,10 @@ def fetch_pokemon(name:str)->dict | None:
             for item in data.get("moves",[])
         ]
     }
-def fetch_and_save(pokemon_ids: list, output_path: str):
+def fetch_and_save(
+        pokemon_ids: list,
+        output_path: str | Path
+    ) -> None :
     output_file=Path(output_path)
     if not output_file.is_absolute():
         output_file=PROJECT_ROOT/output_file
@@ -71,7 +74,7 @@ def fetch_and_save(pokemon_ids: list, output_path: str):
         try:
             with output_file.open("r", encoding="utf-8") as f:
                 all_pokemon = json.load(f)
-            if not isinstance(data,dict):
+            if not isinstance(all_pokemon,dict):
                 raise ValueError("Database must be dictionary.")
             print(
                 f"Found existing data. Loaded {len(all_pokemon)} Pokémon."
@@ -102,14 +105,14 @@ def fetch_and_save(pokemon_ids: list, output_path: str):
             if data.get("id") is not None:
                 cached_ids.add(str(data["id"]))
             pending_saves += 1
-        if pending_saves>25:
+        if pending_saves>=25:
             with output_file.open("w", encoding="utf-8") as f:
                 json.dump(all_pokemon, f, indent=2)
             pending_saves=0
         time.sleep(2)
-        if pending_saves>2:
-            with output_file.open("w",encoding="utf-8") as f:
-                json.dump(all_pokemon,f,indent=2)
+    if pending_saves > 0 :
+        with output_file.open("w",encoding="utf-8") as f:
+            json.dump(all_pokemon,f,indent=2)
     print(
         f"\nDone! Total database size: {len(all_pokemon)} Pokémon."
     )
@@ -128,7 +131,7 @@ def fetch_move(move_name: str)-> dict | None:
         "name": data["name"],
         "type": data.get("type",{}).get("name","normal").capitalize(),
         "power": data.get("power") or 0,
-        "accuracy": data.get("accuaracy") or 0,
+        "accuracy": data.get("accuracy") or 0,
         "pp": data.get("pp") or 0,
         "damage_class": data.get(
             "damage_class",{}
@@ -148,12 +151,14 @@ def fetch_moves_for_pokemon(
         return None
     name=pokemon_name.strip().lower()
     pokemon_data=all_pokemon.get(name)
-    if pokemon_data is None:
-        print(f"pokemon '{name}' not found in database")
+    if not isinstance(pokemon_data,dict):
+        print(f"pokemon '{name}' not found or invalid.")
         return None
-    move_names=pokemon_data.get("moves",[])[:20]
-    if not isinstance(move_names,list):
+    all_move_names=pokemon_data.get("moves",[])
+    if not isinstance(all_move_names,list):
+        print("Invalid moves data in Pokemon database")
         return None
+    move_names=all_move_names[:20]
     moves=[]
     print(f"Found {len(move_names)} moves for {name}...")
     for move_name in move_names:
@@ -167,22 +172,26 @@ def fetch_moves_for_pokemon(
         f"out of {len(move_names)} moves."
     )
     return moves
-'''
+"""
 Module: fetch_data.py
 
 Responsibilities:
-- Fetches Pokémon metadata and move details from the PokéAPI (pokeapi.co).
-- Handles local disk caching, incremental saving, and rate limiting to prevent API blocking.
+- Fetch Pokemon metadata from PokeAPI.
+- Fetch individual move details.
+- Normalize API responses into application data structures.
+- Maintain the local Pokemon JSON database.
+- Cache move information through the data-loading layer.
+- Handle request failures and API timeouts.
 
 Dependencies:
-- external -> requests
-- standard -> json, os, time
+- External: requests
+- Standard: json, time, pathlib
 
-Known problems:
-- Cache check bug: `all_pokemon` keys are Pokémon names (e.g., "bulbasaur"), but `pokemon_ids` contains numeric IDs (e.g., 1, 2), causing the cache lookup to fail.
-- I/O bottleneck: `json.dump()` is called inside the loop on every single iteration, leading to excessive disk writes.
-- Lacks connection pooling (`requests.Session`).
+Known limitations:
+- Uses individual HTTP requests rather than a shared requests.Session.
+- Move retrieval is limited to the first 20 available moves.
+- PokeAPI availability does not establish Pokemon Champions compatibility.
 
 Testing:
-- No automated tests currently documented.
-'''
+- Covered by tests/test_fetch_data.py.
+"""

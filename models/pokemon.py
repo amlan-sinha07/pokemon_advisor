@@ -7,12 +7,12 @@ Responsibilities:
 
 Dependencies:
 - models -> move.py
-
+Improve - Protect HP invariants; correct test documentation.
 Known problems:
 - None
 
 Testing:
-- Covered by tests/test_move.py.
+- Covered by tests/test_pokemon.py.
 '''
 from models.move import Move
 
@@ -40,14 +40,18 @@ class Pokemon:
         self.moves.append(move)
         return True
     def heal(self,amount:int):
+        if amount < 0 :
+            raise ValueError("Heal can not be negative")
         self.current_hp=min(self.stats["hp"],self.current_hp+amount)
     def get_types(self)->list:
         return self.types
-    
+
     def take_damage(self, damage: int):
+        if damage<0:
+            raise ValueError("Damage can not be negative")
         self.current_hp = max(0, self.current_hp - damage)
         print(f"{self.name} took {damage} damage! "
-              f"HP: {self.current_hp}/{self.stats['hp']}")    
+              f"HP: {self.current_hp}/{self.stats['hp']}")
     def __str__(self):
         return (f"{self.name}"
                 f"[{'/'.join(self.types)}]"

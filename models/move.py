@@ -8,7 +8,7 @@ Responsibilities:
 
 Dependencies:
 - None
-
+Keep- Small model, appropriate scope.
 Testing:
 - Covered by tests/test_move.py.
 """

@@ -162,10 +162,7 @@ def test_python_fallback(calculator, monkeypatch,tmp_path):
         defender,
         move
     )
-    print("Damage:", result["damage"])
-    print("Effectiveness:", result["effectiveness"])
-    print("STAB:", result["stab"])
-    print("Engine:", result["engine"])
 
     assert result["damage"] == 24
     assert result["engine"] == "Python"
+'''Remove debug prints and test the exact serialized input string.'''

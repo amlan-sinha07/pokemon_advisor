@@ -100,3 +100,4 @@ def test_recommend_returns_highest_scoring_pokemon(advisor):
     )
 
     assert result == [charmander]
+'''Good basic coverage; add invalid pick and empty-team recommendation cases.'''

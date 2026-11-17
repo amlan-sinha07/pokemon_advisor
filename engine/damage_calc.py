@@ -132,11 +132,8 @@ Responsibilities:
 Dependencies:
 - standard -> subprocess, os
 - internal -> models.pokemon -> Pokemon, models.move -> Move, engine.type_calc -> TypeCalculator
-
+Keep with cleanup	Fix documentation and validation-message typo
 Known problems:
-- Fragile subprocess communication: `input=input_str` is passed without a trailing newline, which can cause `std::cin` in the C++ binary to hang or fail depending on stream buffering.
-- Missing exception handling for subprocess output: `int(result.stdout.strip())` will crash with a `ValueError` if the C++ executable prints warning logs, debug text, or returns malformed data.
-- Lacks returncode checking on `subprocess.run()` to catch binary execution errors.
 
 Testing:
 - tests/test_damage_calc.py.

@@ -19,7 +19,7 @@ def load_box() -> list:
     if not isinstance(box,list):
         raise ValueError("saved pokemon box must contain a list")
     if len(box)>MAX_BOX_SIZE:
-        return ValueError("Saved pokemon box exceed the maximum size")
+        raise ValueError("Saved pokemon box exceed the maximum size")
     if any(
         not isinstance(name,str) or not name.strip()
         for name in box
@@ -30,7 +30,7 @@ def save_box(box:list[str]) -> None:
     if not isinstance(box,list):
         raise ValueError("saved pokemon box must contain a list")
     if len(box)>MAX_BOX_SIZE:
-        return ValueError("Saved pokemon box exceed the maximum size")
+        raise ValueError("Saved pokemon box exceed the maximum size")
     if any(
         not isinstance(name,str) or not name.strip()
         for name in box
@@ -86,7 +86,7 @@ Responsibilities:
 Dependencies:
 - json
 - pathlib
-
+Replace return ValueError with raise ValueError; remove unused os.
 Testing:
 - Covered by tests/test_box_manager.py.
 """

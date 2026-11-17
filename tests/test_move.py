@@ -88,3 +88,4 @@ def test_move_string_representation():
     assert "Power:90" in result
     assert "Cat:Special" in result
     assert "Acc:100" in result
+'''Add case-insensitive category tests.'''

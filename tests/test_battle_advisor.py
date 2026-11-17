@@ -103,3 +103,4 @@ def test_empty_moves_returns_none(advisor, battle_pokemon):
     )
 
     assert result is None
+'''Add mixed damaging/status move and tied-damage cases.'''

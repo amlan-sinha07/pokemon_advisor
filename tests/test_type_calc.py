@@ -29,3 +29,6 @@ def test_unknown_attacking_type(calculator):
             "UnknownType",
             "Grass"
         )
+'''
+Good starting coverage; add unknown defending type and malformed chart cases
+'''

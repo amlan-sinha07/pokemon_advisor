@@ -11,16 +11,15 @@ class BattleAdvisor:
             attacker:Pokemon,
             defender:Pokemon,
             moves:list
-        )->dict:
+        )->dict | None:
         if not moves:
-            print("\nNo moves availble for analysis")
+            print("\nNo moves available for analysis")
             return None
         print(f"\n=== BATTLE ADVISOR ===")
         print(f"Your : {attacker.name} "
               f"HP: {attacker.current_hp}/{attacker.stats['hp']}")
         print(f"Opponent: {defender.name} "
               f"HP: {defender.current_hp}/{defender.stats['hp']}")
-        #speed check
         # speed check
         if attacker.stats["spe"] > defender.stats["spe"]:
             print(f"⚡ You go FIRST (spd {attacker.stats['spe']} "
@@ -30,7 +29,7 @@ class BattleAdvisor:
                   f"> {attacker.stats['spe']})")
         else:
             print(f"⚖️  Same speed — 50/50")
-        
+
         # score each move
         results=[]
         for move in moves:
@@ -74,6 +73,7 @@ Dependencies:
 
 Known problems:
 - None
+Improve	Correct optional return annotation; improve recommendation semantics
 
 Testing:
 - tests/test_battle_advisor.py

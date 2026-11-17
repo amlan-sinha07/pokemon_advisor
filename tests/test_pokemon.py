@@ -49,7 +49,12 @@ def test_take_damage_cannot_reduce_hp_below_zero(pokemon):
 
     assert pokemon.current_hp == 0
 
+def test_take_damage_rejects_negative_amount(pokemon):
 
+    with pytest.raises(ValueError):
+        pokemon.take_damage(-10)
+
+    assert pokemon.current_hp == 35
 def test_heal_pokemon(pokemon):
 
     pokemon.take_damage(15)
@@ -64,7 +69,12 @@ def test_heal_cannot_exceed_max_hp(pokemon):
 
     assert pokemon.current_hp == 35
 
+def test_heal_rejects_negative_amount(pokemon):
 
+    with pytest.raises(ValueError):
+        pokemon.heal(-10)
+
+    assert pokemon.current_hp == 35
 def test_learn_move(pokemon):
 
     move = Move(
@@ -120,3 +130,4 @@ def test_pokemon_string_representation(pokemon):
     result = str(pokemon)
 
     assert result == "Pikachu[Electric]HP: 35/35"
+'''Add negative damage and healing tests.'''
