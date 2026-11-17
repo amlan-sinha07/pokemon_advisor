@@ -1,22 +1,49 @@
-import os
 import json
+import time
+
+from pathlib import Path
+from difflib import get_close_matches
+
 from models.pokemon import Pokemon
 from models.move import Move
-from difflib import get_close_matches
-import time 
-def search_pokemon(partial: str)->list:
-    with open("data/pokemon_all.json","r",encoding="utf-8") as f:
-        all_pokemon = json.load(f)
-    
-    all_names= list(all_pokemon.keys())
-    matches = get_close_matches(
-        partial.lower(),
+
+DATA_DIR=Path(__file__).resolve().parent/"data"
+POKEMON_FILE=DATA_DIR/"pokemon_all.json"
+
+def _load_pokemon_data() -> dict:
+    try:
+        with POKEMON_FILE.open("r",encoding="utf-8") as f:
+            data=json.load(f)
+    except FileNotFoundError as exc:
+        raise FileNotFoundError (
+            f"Pokemon Database not found: {POKEMON_FILE}"
+        ) from exc
+    except json.JSONDecodeError as exc:
+        raise ValueError (
+            f"Pokemon database contain invalid json"
+        ) from exc
+    if not isinstance(data,dict):
+        raise ValueError (
+            "Pokemon Database must contain a dictionary"
+        )
+    return data
+def search_pokemon(partial: str)->list[str]:
+    all_pokemon=_load_pokemon_data()
+    query=partial.strip().lower()
+    if not query:
+        return []
+    all_names= [
+        item["name"].strip().lower()
+        for item in all_pokemon.values()
+        if isinstance(item,dict)
+        and isinstance(item.get("name"),str)
+    ]
+    return get_close_matches(
+        query,
         all_names,
         n=5,
         cutoff=0.5
-
     )
-    return matches
 def load_pokemon_fuzzy(name:str):
     try:
         return load_pokemon(name)
@@ -33,37 +60,38 @@ def load_pokemon_fuzzy(name:str):
             print(f"    {i+1}. {m}")
         choice = input("choose (1-5): ").strip()
         try:
-            return load_pokemon(matches[int(choice)-1])
-        except:
-            return load_pokemon(matches[0]) 
-
+            selected_index=int(choice)-1
+        except ValueError:
+            print("Invalid selection")
+            return None
+        if not 0<=selected_index<len(matches):
+            print("Selection out of range")
+            return None
+        return load_pokemon(matches[selected_index])
 def load_pokemon(name:str)->Pokemon:
-    with open("data/pokemon_all.json","r",encoding="utf-8") as f:
-        all_pokemon=json.load(f)
-    name_input=name.lower().strip()
+    all_pokemon=_load_pokemon_data()
+    name_input=name.strip().lower()
     pokemon_data =None
-
     for item in all_pokemon.values():
-        if item.get("name","").lower() == name_input:
+        if not isinstance(item,dict):
+            continue
+        if item.get("name","").strip().lower() == name_input:
             pokemon_data = item
             break
     if pokemon_data is None:
-        raise ValueError(f"{name} not found in database")
-    
-    #if name not in all_pokemon:
-    #    raise ValueError(f"{name} not found in database")
-    #data=all_pokemon[name]
+        raise ValueError(
+            f"{name} not found in database"
+        )
     moves=[Move(m,"Normal",0,"Status",100)
            for m in pokemon_data["moves"][:4]]
     return Pokemon(
         name=pokemon_data["name"].capitalize(),
-                  types=pokemon_data["types"],
-                  stats=pokemon_data["stats"],
-                  moves=moves
+        types=pokemon_data["types"],
+        stats=pokemon_data["stats"],
+        moves=moves
     )
 def load_all_pokemon()->dict:
-    with open("data/pokemon_all.json","r",encoding="utf-8") as f:
-        all_pokemon=json.load(f)
+    all_pokemon=_load_pokemon_data()
     result={}
     for name, item in all_pokemon.items():
         pokemon_name= item["name"].lower()
@@ -76,39 +104,35 @@ def load_all_pokemon()->dict:
             moves=moves
         )
     return result
-def get_pokemon_moves(pokemon_name:str)-> list:
-    moves_path = f"data/moves_{pokemon_name.lower()}.json"
-
-    if os.path.exists(moves_path):
-        with open(moves_path, "r",encoding="utf-8") as f:
+def get_pokemon_moves(pokemon_name: str) -> list[dict]:
+    moves_path = DATA_DIR / f"moves_{pokemon_name.strip().lower()}.json"
+    if moves_path.exists():
+        with moves_path.open("r", encoding="utf-8") as f:
             cached_data = json.load(f)
-            if cached_data is not None:
-                return cached_data 
-    
-    print(f"fetching moves for {pokemon_name}...")
+        if not isinstance(cached_data, list):
+            raise ValueError(
+                f"Invalid move cache: {moves_path}"
+            )
+        return cached_data
+    print(f"Fetching moves for {pokemon_name}...")
     from scraper.fetch_data import fetch_moves_for_pokemon
     moves = fetch_moves_for_pokemon(pokemon_name.lower())
-
     if moves is None:
-        print(
-            f" Error:Could not fetch pokemon moves for {pokemon_name}. Check your scraper or internet connection"
-
-        )
+        print(f"Could not fetch moves for {pokemon_name}.")
         return []
-    with open(moves_path,"w",encoding="utf-8") as f:
-        json.dump(moves,f,indent=2)
-
+    if not isinstance(moves, list):
+        raise ValueError("Fetched move data must be a list.")
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    with moves_path.open("w", encoding="utf-8") as f:
+        json.dump(moves, f, indent=2)
     return moves
-def load_pokemon_with_moves(name:str)->Pokemon:
+def load_pokemon_with_moves(name:str)->Pokemon | None:
     pokemon = load_pokemon_fuzzy(name)
     if not pokemon:
         return None
-    
-    raw_moves = get_pokemon_moves(name.lower())
-
+    raw_moves = get_pokemon_moves(pokemon.name.lower())
     move_objects = []
     for m in raw_moves:
-        
         move = Move(
             name= m["name"],
             move_type=m["type"],
@@ -119,66 +143,59 @@ def load_pokemon_with_moves(name:str)->Pokemon:
         move_objects.append(move)
     pokemon.moves = move_objects
     return pokemon
-def get_move(move_name: str)->dict:
-    import glob
+def get_move(move_name: str)->dict | None:
     move_name_clean = move_name.lower().replace(" ","-")
-
-    for filepath in glob.glob("data/moves_*.json"):
-        with open(filepath,"r",encoding="utf-8") as f:
-            moves = json.load(f)
-        for move in moves:
-            if move["name"] == move_name_clean:
-                return move
-        
-        print(f"fetching move data for {move_name}...")
-        url= f"https://pokeapi.co/api/v2/move/{move_name_clean}"
-        
-        import requests
-        response=requests.get(url)
+    for filepath in DATA_DIR.glob("moves_*.json"):
+        with filepath.open("r",encoding="utf-8") as f:
+            moves=json.load(f)
+        for move_data in moves:
+            if move_data.get("name")==move_name_clean:
+                return move_data
+    print(f"fetching move data for {move_name}")
+    import requests
+    url= f"https://pokeapi.co/api/v2/move/{move_name_clean}"
+    try:
+        response=requests.get(url,timeout=10)
         if response.status_code != 200:
             return None
         data=response.json()
-        time.sleep(0.2)
-
-        effect = ""
-
-        if data.get("effect_entries"):
-            for entry in data["effect_entries"]:
-                if entry.get("language",{}).get("name") == "en":
-                    effect = entry.get("short_effect","")
-                    break
-        return {
-            "name":data.get("name"),
-            "type":data.get("type",{}).get("name","normal").capitalize(),
-            "power":data.get("power") or 0,
-            "accuracy":data.get("accuracy") or 0,
-            "pp":data.get("pp") or 0,
-            "damage_class":data.get("damage_class",{}).get("name","Physical").capitalize(),
-            "effect": effect
-            #data["effect_entries"][0]["short_effect"]
-             #        if data["effect_entries"] else ""
-        }
-def get_move_fuzzy(move_name:str)->dict:
+    except (requests.RequestException,ValueError) as exc:
+        print(f"Could not fetch move data : {exc}")
+        return None
+    time.sleep(0.2)
+    effect=""
+    if data.get("effect_entries"):
+        for entry in data["effect_entries"]:
+            if entry.get("language",{}).get("name") == "en":
+                effect = entry.get("short_effect","")
+                break
+    return {
+        "name":data.get("name"),
+        "type":data.get("type",{}).get("name","normal").capitalize(),
+        "power":data.get("power") or 0,
+        "accuracy":data.get("accuracy") or 0,
+        "pp":data.get("pp") or 0,
+        "damage_class":data.get("damage_class",{}).get("name","Physical").capitalize(),
+        "effect": effect
+    }
+def get_move_fuzzy(move_name:str)->dict | None:
     move_name_clean = move_name.lower().replace(" ","-")
     move=get_move(move_name_clean)
     if move:
         return move
     from difflib import get_close_matches
     import glob
-    
     all_moves_names=[]
-    for filepath in glob.glob("data/moves_*.json"):
+    for filepath in DATA_DIR.glob("moves_*.json"):
         with open(filepath,"r",encoding="utf-8") as f:
             moves=json.load(f)
         for move in moves:
-            if move["name"] not in all_moves_names:
-                all_moves_names.append(move["name"])
+            move_name=move.get("name")
+            if move_name and move_name not in all_moves_names:
+                all_moves_names.append(move_name)
     if not all_moves_names :
         print(f"move {move_name} not found")
         return None
-    
-
-
     if move_name_clean in all_moves_names:
         return get_move(move_name_clean)
 
@@ -197,17 +214,14 @@ def get_move_fuzzy(move_name:str)->dict:
         print(f" {i+1}.{m}")
     choice=input("choose (1-5): ").strip()
     try:
-        return get_move(matches[int(choice)-1])
-    except:
-        return get_move(matches[0])        
-    
-from data_loader import get_pokemon_moves 
-
-pokemon_to_fetch=[]
-for name in pokemon_to_fetch:
-    print(f"fetching moves for {name}...")
-    get_pokemon_moves(name)
-    print(f"done")
+        selected_index=int(choice)-1
+    except ValueError:
+        print("Invalid selection")
+        return None
+    if not 0<=selected_index<len(matches):
+        print("selection out of range")
+        return None
+    return get_move(matches[selected_index])
 '''
 Module: data_loader.py
 
@@ -221,10 +235,7 @@ Dependencies:
 - external -> requests
 - internal -> models.pokemon -> Pokemon, models.move -> Move, scraper.fetch_data -> fetch_moves_for_pokemon
 
-Known problems:
-- Nested loop bug in `get_move`: the network fetch block is incorrectly indented *inside* the file-reading loop, causing it to prematurely fetch or return on the very first file checked if the move isn't found immediately.
-- Global scope import leak: `from data_loader import get_pokemon_moves` at the bottom of the module imports from itself, and `pokemon_to_fetch` is an empty uninitialized list.
-
+Validate cached records; update documentation; remove unused imports.
 Testing:
 - No automated tests currently documented.
 '''

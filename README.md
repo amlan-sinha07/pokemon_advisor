@@ -1,185 +1,195 @@
 # Pokemon Champions Battle Advisor
 
-A real time battle decision tool for Pokemon Champions (2026) built in Python with a C++ damage calculation engine.
+A Python command-line tool for pre-match team recommendations and in-battle move analysis. The project combines local JSON data, PokéAPI lookups, type-effectiveness calculations, and a C++ damage-calculation executable.
 
-## What It Does
+> **Project status:** Personal learning project / prototype. The application provides estimates and decision support; it is not connected to the game and does not read live battle state automatically.
 
-**Pre-Match (1 minute window):**
+## Features
 
-- Input opponent's 6 Pokemon
-- Loads your saved box automatically
-- Scores each of your pokemon against opponent team 
-- Recommends best 4 to bring with type coverage reasoning
+### Pre-match team selector
 
-**In-Battle (40 seconds window):**
+- Loads up to six Pokémon from your saved local box.
+- Accepts Pokémon names with fuzzy matching.
+- Evaluates your Pokémon against a manually entered opposing team.
+- Ranks your Pokémon using a heuristic based on type matchups and a speed bonus.
+- Recommends up to four Pokémon from your team.
 
-- Input your active Pokemon + current HP
-- Input opponent's active Pokemon + current HP
-- Enter your 4 moves
-- Recommends best move with damage estimate, effectiveness, speed check
+### In-battle move advisor
 
-## Sample Output
+- Accepts your active Pokémon and the opponent's active Pokémon.
+- Accepts their current HP values as manual input.
+- Retrieves move details from local cache files or PokéAPI.
+- Estimates damage for damaging moves using a Python wrapper and a C++ executable when available.
+- Shows type effectiveness, STAB, a speed comparison, and a highest-estimated-damage recommendation.
 
-### Pre-match Team Selector
-![Pre-Match team selector](<Screenshot 2026-06-27 185749.png>)
-![Team Suggestion](<Screenshot 2026-06-27 185804.png>)
+### Box manager
 
-### In-Battle Move Advisor
-![In-Battle Move Advisor](<Screenshot 2026-06-27 190707.png>)
-![Move Selector](<Screenshot 2026-06-27 190721.png>)
+- Saves a personal list of up to six Pokémon in `my_box.json`.
+- Supports viewing, adding, and removing Pokémon.
+- Keeps the personal box out of Git by ignoring `my_box.json`.
 
-### Viewing full box
-![Viewing full box](<Screenshot 2026-06-27 190731.png>)
+## Important limitations
 
-### Pre Match Analysis
+- This is a command-line assistant. It does not connect to Pokémon Champions, inspect the game screen, or obtain live battle state. Pokémon, HP, and moves are entered by the user.
+- Pre-match scoring is a project-specific heuristic based on type interactions and speed. It is not a full team simulator and does not evaluate every move, ability, item, or battle condition.
+- The damage calculation is a simplified level-50 estimate. It is not a complete implementation of every Pokémon Champions battle mechanic. Accuracy, move priority, critical hits, random damage variation, abilities, items, weather, and other modifiers may not be represented.
+- Pokémon and move records are retrieved from PokéAPI. A record being available from PokéAPI does not establish that the Pokémon or move is available in Pokémon Champions.
+- The type chart is loaded from `data/type_chart.json`. Verify that this file contains the correct chart for the game and ruleset you intend to model; do not treat the output as authoritative until that data has been validated.
+- The C++ backend is currently configured as `engine/damage_calc.exe`, so the instructions below target Windows.
 
-Opponent's team:
- Charizard [Fire/Flying]
- Venusaur [Grass/Poison]
- Blaziken [Fire/Fighting]
- Abomasnow [Grass/Ice]
- Pikachu [Electric]
- Lucario [Fighting/Steel]
+## Requirements
 
-Your team score:
- Infernape    [Fire/Fighting  ] score:19.75
- Ceruledge    [Fire/Ghost     ] score:18.25
- Froslass     [Ice/Ghost      ] score:14.0
- Pelipper     [Water/Flying   ] score:13.0
- Scizor       [Bug/Steel      ] score:8.75
- Raichu       [Electric       ] score:8.75
+- Windows (the current Python wrapper expects `damage_calc.exe`).
+- Python 3.11 or newer.
+- A C++ compiler that supports C++17, such as MinGW-w64 `g++`.
+- Runtime Python dependency: `requests`.
+- Development/test dependency: `pytest`.
 
->>> BRING THESE 4 POKEMON <<<
- Infernape (score: 19.75)
- Ceruledge (score: 18.25)
- Froslass (score: 14.0)
- Pelipper (score: 13.0)
+## Project setup (Windows PowerShell)
 
-### In battle 
+### 1. Clone the repository
 
-=== BATTLE ADVISOR ===
-Your : Infernape HP: 76/76
-Opponent: Abomasnow HP: 90/90
-⚡ You go FIRST (spd 108 > 60)
-
-Move analysis:
-    flare-blitz      dmg:451    effectiveness: 4.0x (double super effective)
-    heat-wave        dmg:319    effectiveness: 4.0x (double super effective)
-    flamethrower     dmg:303    effectiveness: 4.0x (double super effective)
-    solar-beam       dmg:33     effectiveness: 0.5x (not very effective)
-
->>> USE: flare-blitz (double super effective, ~ 451 damage) <<<
-
-## Installation
-
-### Requirements
-- Python 3.11+
-- g++ compiler (for C++ damage engine)
-
-### Setup
-
-1. Clone the repository
-```bash
+```powershell
 git clone https://github.com/amlan-sinha07/pokemon_advisor.git
 cd pokemon_advisor
 ```
 
-2. Install Python dependencies
-```bash
-pip install requests
+### 2. Create and activate a virtual environment
+
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-3. Compile C++ damage calculator
-```bash
-g++ engine/damage_calc.cpp -o engine/damage_calc
+### 3. Install dependencies
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-4. Data is already cached — 1025 Pokemon ready to use.
+To run the test suite, also install the development dependencies:
 
-## Usage
+```powershell
+python -m pip install -r requirements-dev.txt
+```
 
-Run as normal user (no admin required):
-```bash
+### 4. Prepare local data
+
+The application expects these files in the project's `data/` directory:
+
+```text
+data/
+├── pokemon_all.json
+├── type_chart.json
+└── moves_<pokemon>.json   # optional per-Pokémon move caches
+```
+
+`pokemon_all.json` contains Pokémon records and their base stats/move names. `type_chart.json` supplies the type-effectiveness matrix used by the type calculator. Move-cache files are created as move data is fetched.
+
+If the Pokémon database is not present, it can be generated through the scraper's `fetch_and_save()` function. For example, to fetch a small test database containing Bulbasaur, use:
+
+```powershell
+python -c "from scraper.fetch_data import fetch_and_save; fetch_and_save(['1'], 'data/pokemon_all.json')"
+```
+
+To fetch a larger ID range, pass the required IDs to the same function. The scraper applies a delay between requests, so bulk data collection can take a while. Make sure `data/type_chart.json` is also present; the project does not generate that chart automatically.
+
+### 5. Compile the C++ damage engine
+
+Run this from the project root:
+
+```powershell
+g++ -std=c++17 -Wall -Wextra -Wpedantic engine/damage_calc.cpp -o engine/damage_calc.exe
+```
+
+The output filename matters: the Python wrapper looks for `engine/damage_calc.exe`. The executable is generated locally and is intentionally excluded from Git.
+
+You can smoke-test the executable with:
+
+```powershell
+"50 100 100 1.0 1.0" | .\engine\damage_calc.exe
+```
+
+Expected output for this simplified formula and input is:
+
+```text
+24
+```
+
+### 6. Run the application
+
+```powershell
 python main.py
 ```
 
-### Menu
+## Using the CLI
 
-1. Pre-match team selector = use before match starts 
-2. In-battle move advisor = use during battle
-3. Manage my box = save your pokemon's once 
-4. Exit
+The main menu provides four options:
 
-### First time setup
-Go to option 3 first — add your 6 Pokemon to your box.
-After that, option 1 loads your team automatically.
+1. **Pre-match team selector** — uses your saved box when available, then asks for the opponent's team. If no saved box exists, it asks you to enter your own team.
+2. **In-battle move advisor** — asks for both active Pokémon, current HP, and four move names, then ranks the entered moves.
+3. **Manage my box** — view, add, or remove Pokémon in your local box.
+4. **Exit** — leave the application.
 
-## How it works
+For first-time use, open **Manage my box** and add your Pokémon before using the pre-match selector.
 
-User input
+## Running tests
 
-↓
+Run the complete automated test suite from the project root:
 
-Python (data layer)
+```powershell
+python -m pytest -q
+```
 
-1025 Pokemon cached from PokeAPI
-Move data fetched on demand + cached locally
-Fuzzy name matching (partial names work)
+For verbose output:
 
-↓
+```powershell
+python -m pytest -v
+```
 
-Python (calculation layer)
-Type effectiveness (18×18 chart)
-Team scoring algorithm
+The tests cover the type calculator, box persistence, data loading, Pokémon and Move models, pre-match and battle advisors, the Python/C++ damage wrapper, and scraper behavior. Tests should use temporary files and mocked network/subprocess calls rather than requiring live API requests.
 
-↓
+## Project structure
 
-C++ (damage engine)
-Standard Pokemon damage formula
-Called via subprocess for speed
-
-↓
-
-Recommendation output
-
-## Tech Stack
-
-- **Python 3.11** — core logic, CLI, data pipeline
-- **C++** — damage calculation engine
-- **PokeAPI** — Pokemon and move data source
-- **JSON** — local data caching
-- **difflib** — fuzzy name matching
-- **subprocess** — Python-C++ bridge
-
-## Data Sources
-
-- [PokeAPI](https://pokeapi.co) — base Pokemon stats and moves
-- Type effectiveness chart — hardcoded from official Pokemon Champions data
-
-## Project Structure
-
+```text
 pokemon_advisor/
+├── data/                       # Local Pokémon, type-chart, and move JSON data
+├── docs/
+│   └── refactoring-baseline.md # Initial state and refactoring outcomes
+├── engine/
+│   ├── battle_advisor.py       # Move evaluation and recommendation
+│   ├── pre_match_advisor.py    # Team matchup scoring and selection
+│   ├── type_calc.py            # Type-effectiveness calculations
+│   ├── damage_calc.py          # Python wrapper and fallback calculation
+│   └── damage_calc.cpp         # C++ damage calculation executable source
+├── models/
+│   ├── pokemon.py              # Pokémon model and HP/move state
+│   └── move.py                 # Move model
+├── scraper/
+│   └── fetch_data.py           # PokéAPI retrieval and local data generation
+├── tests/                      # pytest regression tests
+├── box_manager.py              # Personal box persistence and CLI operations
+├── data_loader.py              # JSON loading, fuzzy search, model construction
+├── main.py                     # CLI entry point and application flow
+├── requirements.txt            # Runtime Python dependencies
+└── requirements-dev.txt        # Test/development dependencies
+```
 
-├── data/               ← cached JSON data
+## Data sources
 
-├── engine/             ← type calc, damage calc (Python + C++)
+- [PokéAPI](https://pokeapi.co/) — Pokémon metadata, base stats, and move information.
+- `data/type_chart.json` — local type-effectiveness data used by the application. Its source and compatibility with the target game's ruleset should be documented and verified separately.
 
-├── models/             ← Pokemon, Move classes
+## Git hygiene
 
-├── scraper/            ← PokeAPI data fetcher
+The following files are local/generated and should not normally be committed:
 
-├── box_manager.py      ← personal box save/load
-
-├── data_loader.py      ← loads data into objects
-
-├── main.py             ← CLI entry point
-
-└── my_box.json         ← your saved Pokemon box
+- `engine/damage_calc.exe` — compiled binary; compile it locally using the command above.
+- `my_box.json` — personal saved Pokémon box.
+- Python cache directories, pytest cache, and virtual environments.
 
 ## Author
 
 Amlan Sinha  
 GitHub: [amlan-sinha07](https://github.com/amlan-sinha07)
-
----
-*Built in 32 days as part of a self-directed Python + C++ learning journey.*
